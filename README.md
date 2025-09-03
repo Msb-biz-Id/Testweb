@@ -1,18 +1,5 @@
 # Testweb
 
-Jawaban sebelumnya telah mencakup skema database dan BRD yang terperinci. Untuk membuatnya lebih lengkap dan komprehensif, saya akan menambahkan bagian-bagian yang menjelaskan secara praktis **alur kerja (workflow)**, **spesifikasi teknis tambahan**, dan **rencana deployment** untuk proyek Anda. Dengan demikian, dokumen ini akan menjadi panduan yang sangat solid dari hulu ke hilir.
-
----
-
-### **BRD (Business Requirements Document)**
-
-**Proyek:** Website Landing Page Perusahaan Jersey
-**Versi:** 5.0 (Final)
-**Tanggal:** 3 September 2025
-**Metodologi Pengembangan:** PHP Native dengan Pola Desain MVC
-
----
-
 ### **1. Pendahuluan**
 
 Dokumen ini adalah panduan lengkap untuk pengembangan website jersey. Tujuannya adalah membangun platform yang **fleksibel**, **aman**, dan **mudah dikelola** menggunakan PHP Native dengan pola MVC. Dokumen ini mencakup semua persyaratan, dari skema database hingga alur kerja implementasi, yang akan memastikan proyek berjalan lancar dan sesuai ekspektasi.

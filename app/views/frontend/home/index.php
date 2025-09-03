@@ -8,21 +8,32 @@ ob_start();
 <section class="hero-section bg-primary text-white py-5">
     <div class="container">
         <div class="row align-items-center">
-            <div class="col-lg-6">
-                <h1 class="display-4 fw-bold mb-4">
+            <div class="col-lg-6 hero-content">
+                <h1 class="display-4 fw-bold mb-4 animate-left">
                     Jersey Berkualitas Tinggi
                 </h1>
-                <p class="lead mb-4">
+                <p class="lead mb-4 animate-left">
                     Temukan koleksi jersey terbaik dengan desain eksklusif dan kualitas premium. 
                     Cocok untuk berbagai aktivitas olahraga dan fashion.
                 </p>
-                <a href="/produk" class="btn btn-light btn-lg">
-                    <i class="fas fa-shopping-bag me-2"></i>
-                    Lihat Produk
-                </a>
+                <div class="d-flex flex-wrap gap-3 animate-left">
+                    <a href="/produk" class="btn btn-light btn-lg">
+                        <i class="fas fa-shopping-bag me-2"></i>
+                        Lihat Produk
+                    </a>
+                    <a href="#featured-products" class="btn btn-outline-light btn-lg">
+                        <i class="fas fa-star me-2"></i>
+                        Produk Unggulan
+                    </a>
+                </div>
             </div>
-            <div class="col-lg-6">
-                <img src="/assets/images/hero-jersey.jpg" alt="Jersey Premium" class="img-fluid rounded shadow">
+            <div class="col-lg-6 animate-right">
+                <div class="hero-image-container">
+                    <img src="/assets/images/hero-jersey.jpg" alt="Jersey Premium" class="img-fluid rounded shadow-lg" data-preload>
+                    <div class="hero-badge">
+                        <span class="badge bg-success fs-6">Premium Quality</span>
+                    </div>
+                </div>
             </div>
         </div>
     </div>
@@ -30,51 +41,83 @@ ob_start();
 
 <!-- Featured Products -->
 <?php if (!empty($featuredProducts)): ?>
-<section class="py-5">
+<section id="featured-products" class="py-5">
     <div class="container">
         <div class="row">
             <div class="col-12">
-                <h2 class="text-center mb-5">Produk Unggulan</h2>
+                <h2 class="text-center mb-5 animate-in">Produk Unggulan</h2>
+                <p class="text-center text-muted mb-5 animate-in">Koleksi jersey terbaik dengan kualitas premium</p>
             </div>
         </div>
         
-        <div class="row">
+        <div class="product-grid animate-stagger">
             <?php foreach ($featuredProducts as $product): ?>
-            <div class="col-lg-3 col-md-6 mb-4">
-                <div class="card h-100 shadow-sm">
+            <div class="product-card">
+                <div class="position-relative">
                     <img src="/uploads/<?= htmlspecialchars($product['featured_image'] ?? 'default-product.jpg') ?>" 
                          class="card-img-top" alt="<?= htmlspecialchars($product['name']) ?>" 
-                         style="height: 250px; object-fit: cover;">
+                         style="height: 250px; object-fit: cover;"
+                         loading="lazy">
                     
-                    <div class="card-body d-flex flex-column">
-                        <h5 class="card-title"><?= htmlspecialchars($product['name']) ?></h5>
-                        <p class="card-text text-muted flex-grow-1">
-                            <?= htmlspecialchars($product['short_description'] ?? substr($product['description'], 0, 100) . '...') ?>
-                        </p>
-                        
-                        <div class="mt-auto">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <span class="h5 text-primary mb-0">
+                    <?php if ($product['sale_price'] && $product['sale_price'] < $product['price']): ?>
+                    <div class="badge bg-danger position-absolute top-0 end-0 m-2">
+                        Sale
+                    </div>
+                    <?php endif; ?>
+                    
+                    <?php if ($product['is_featured']): ?>
+                    <div class="badge bg-warning position-absolute top-0 start-0 m-2">
+                        <i class="fas fa-star me-1"></i>Featured
+                    </div>
+                    <?php endif; ?>
+                </div>
+                
+                <div class="card-body d-flex flex-column">
+                    <h5 class="card-title"><?= htmlspecialchars($product['name']) ?></h5>
+                    <p class="card-text text-muted flex-grow-1">
+                        <?= htmlspecialchars($product['short_description'] ?? substr($product['description'], 0, 100) . '...') ?>
+                    </p>
+                    
+                    <div class="mt-auto">
+                        <div class="d-flex justify-content-between align-items-center mb-3">
+                            <div>
+                                <?php if ($product['sale_price'] && $product['sale_price'] < $product['price']): ?>
+                                <span class="price text-primary">
+                                    Rp <?= number_format($product['sale_price'], 0, ',', '.') ?>
+                                </span>
+                                <span class="price-original">
                                     Rp <?= number_format($product['price'], 0, ',', '.') ?>
                                 </span>
-                                <?php if ($product['sale_price'] && $product['sale_price'] < $product['price']): ?>
-                                <span class="badge bg-danger">Sale</span>
+                                <?php else: ?>
+                                <span class="price text-primary">
+                                    Rp <?= number_format($product['price'], 0, ',', '.') ?>
+                                </span>
                                 <?php endif; ?>
                             </div>
                             
-                            <a href="/produk/<?= htmlspecialchars($product['slug']) ?>" 
-                               class="btn btn-primary w-100">
-                                Lihat Detail
-                            </a>
+                            <div class="rating">
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                                <i class="fas fa-star text-warning"></i>
+                            </div>
                         </div>
+                        
+                        <a href="/produk/<?= htmlspecialchars($product['slug']) ?>" 
+                           class="btn btn-primary w-100">
+                            <i class="fas fa-eye me-2"></i>
+                            Lihat Detail
+                        </a>
                     </div>
                 </div>
             </div>
             <?php endforeach; ?>
         </div>
         
-        <div class="text-center mt-4">
+        <div class="text-center mt-5">
             <a href="/produk" class="btn btn-outline-primary btn-lg">
+                <i class="fas fa-th-large me-2"></i>
                 Lihat Semua Produk
             </a>
         </div>

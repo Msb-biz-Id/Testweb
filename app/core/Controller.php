@@ -20,7 +20,26 @@ abstract class Controller
         
         // Start session if not started
         if (session_status() === PHP_SESSION_NONE) {
+            // Secure session configuration
+            ini_set('session.cookie_httponly', 1);
+            ini_set('session.cookie_secure', isset($_SERVER['HTTPS']));
+            ini_set('session.use_strict_mode', 1);
+            ini_set('session.cookie_samesite', 'Strict');
             session_start();
+        }
+        
+        // Set security headers
+        Security::setSecurityHeaders();
+        
+        // Sanitize all input
+        $this->request->sanitizeAll();
+        
+        // Check for suspicious activity
+        if (Security::detectSuspiciousActivity()) {
+            Security::logSecurityEvent('suspicious_activity_detected', [
+                'url' => $_SERVER['REQUEST_URI'],
+                'method' => $_SERVER['REQUEST_METHOD']
+            ]);
         }
     }
 

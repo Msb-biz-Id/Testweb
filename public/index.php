@@ -4,12 +4,26 @@
  * Bootstrap the application and handle all requests
  */
 
-// Error reporting
-error_reporting(E_ALL);
-ini_set('display_errors', 1);
+// Error reporting based on environment
+$isProduction = ($_ENV['APP_ENV'] ?? 'development') === 'production';
+
+if ($isProduction) {
+    error_reporting(0);
+    ini_set('display_errors', 0);
+    ini_set('log_errors', 1);
+} else {
+    error_reporting(E_ALL);
+    ini_set('display_errors', 1);
+}
 
 // Set timezone
 date_default_timezone_set('Asia/Jakarta');
+
+// Set memory limit
+ini_set('memory_limit', '256M');
+
+// Set execution time limit
+set_time_limit(30);
 
 // Define application paths
 define('APP_ROOT', dirname(__DIR__));
@@ -124,6 +138,10 @@ $router->get('/admin/client-logos', 'Admin\ClientLogoController@index', ['AuthMi
 $router->post('/admin/client-logos', 'Admin\ClientLogoController@store', ['AuthMiddleware']);
 $router->delete('/admin/client-logos/{id}', 'Admin\ClientLogoController@delete', ['AuthMiddleware']);
 
+// SEO Routes
+$router->get('/sitemap.xml', 'SitemapController@index');
+$router->get('/robots.txt', 'SitemapController@robots');
+
 // API Routes
 $router->get('/api/products', 'Api\ProductController@index');
 $router->get('/api/posts', 'Api\PostController@index');
@@ -134,16 +152,28 @@ try {
     $router->dispatch();
 } catch (Exception $e) {
     // Log error
-    error_log($e->getMessage());
+    $logger = new \App\Core\Logger();
+    $logger->error('Application Error', [
+        'message' => $e->getMessage(),
+        'file' => $e->getFile(),
+        'line' => $e->getLine(),
+        'trace' => $e->getTraceAsString(),
+        'url' => $_SERVER['REQUEST_URI'] ?? 'unknown',
+        'method' => $_SERVER['REQUEST_METHOD'] ?? 'unknown'
+    ]);
     
     // Show error page
     http_response_code(500);
-    if ($config['debug']) {
-        echo '<h1>Error</h1>';
-        echo '<p>' . htmlspecialchars($e->getMessage()) . '</p>';
+    if ($config['debug'] && !$isProduction) {
+        echo '<h1>Application Error</h1>';
+        echo '<p><strong>Message:</strong> ' . htmlspecialchars($e->getMessage()) . '</p>';
+        echo '<p><strong>File:</strong> ' . htmlspecialchars($e->getFile()) . '</p>';
+        echo '<p><strong>Line:</strong> ' . $e->getLine() . '</p>';
+        echo '<h3>Stack Trace:</h3>';
         echo '<pre>' . htmlspecialchars($e->getTraceAsString()) . '</pre>';
     } else {
         echo '<h1>Internal Server Error</h1>';
         echo '<p>Something went wrong. Please try again later.</p>';
+        echo '<p>If the problem persists, please contact the administrator.</p>';
     }
 }

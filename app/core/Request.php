@@ -213,7 +213,7 @@ class Request
     }
 
     /**
-     * Validate input data
+     * Validate input data with enhanced validation
      */
     public function validate($rules)
     {
@@ -232,6 +232,28 @@ class Request
         }
         
         return $errors;
+    }
+
+    /**
+     * Sanitize all input data
+     */
+    public function sanitizeAll()
+    {
+        $_GET = array_map([$this, 'sanitizeValue'], $_GET);
+        $_POST = array_map([$this, 'sanitizeValue'], $_POST);
+        $_COOKIE = array_map([$this, 'sanitizeValue'], $_COOKIE);
+    }
+
+    /**
+     * Sanitize single value
+     */
+    private function sanitizeValue($value)
+    {
+        if (is_array($value)) {
+            return array_map([$this, 'sanitizeValue'], $value);
+        }
+        
+        return htmlspecialchars(trim($value), ENT_QUOTES, 'UTF-8');
     }
 
     /**
@@ -277,6 +299,36 @@ class Request
             case 'url':
                 if (!empty($value) && !filter_var($value, FILTER_VALIDATE_URL)) {
                     return "The {$field} field must be a valid URL.";
+                }
+                break;
+                
+            case 'alpha':
+                if (!empty($value) && !preg_match('/^[a-zA-Z\s]+$/', $value)) {
+                    return "The {$field} field may only contain letters and spaces.";
+                }
+                break;
+                
+            case 'alpha_numeric':
+                if (!empty($value) && !preg_match('/^[a-zA-Z0-9]+$/', $value)) {
+                    return "The {$field} field may only contain letters and numbers.";
+                }
+                break;
+                
+            case 'regex':
+                $pattern = $ruleValue;
+                if (!empty($value) && !preg_match($pattern, $value)) {
+                    return "The {$field} field format is invalid.";
+                }
+                break;
+                
+            case 'unique':
+                // This would need database connection - implement in specific controllers
+                break;
+                
+            case 'confirmed':
+                $confirmField = $field . '_confirmation';
+                if ($value !== $this->input($confirmField)) {
+                    return "The {$field} confirmation does not match.";
                 }
                 break;
         }

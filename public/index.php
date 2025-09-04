@@ -117,6 +117,11 @@ $router->get('/admin/careers/applications/view/{id}', 'Admin\CareerController@vi
 $router->post('/admin/careers/applications/update-status', 'Admin\CareerController@updateApplicationStatus', ['AuthMiddleware']);
 $router->get('/admin/careers/applications/delete/{id}', 'Admin\CareerController@deleteApplication', ['AuthMiddleware']);
 $router->get('/admin/careers/applications/export', 'Admin\CareerController@exportApplications', ['AuthMiddleware']);
+
+// SEO Dashboard routes
+$router->get('/admin/seo/dashboard', 'Admin\SEOController@dashboard', ['AuthMiddleware']);
+$router->get('/admin/seo/analytics', 'Admin\SEOController@analytics', ['AuthMiddleware']);
+$router->get('/admin/seo/redirects', 'Admin\SEOController@redirects', ['AuthMiddleware']);
 $router->get('/admin/products/{id}/edit', 'Admin\ProductController@edit', ['AuthMiddleware']);
 $router->put('/admin/products/{id}', 'Admin\ProductController@update', ['AuthMiddleware']);
 $router->delete('/admin/products/{id}', 'Admin\ProductController@delete', ['AuthMiddleware']);

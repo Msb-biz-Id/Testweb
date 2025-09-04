@@ -106,22 +106,46 @@ DB_USER=root
 DB_PASS=your_password
 ```
 
-### 4. Installasi Otomatis
-1. Buka browser dan akses: `http://your-domain/install.php`
-2. Isi form konfigurasi database
-3. Isi data admin account
-4. Klik "Install Application"
-5. Hapus file `install.php` setelah instalasi selesai
+### 4. Installasi Manual (Recommended)
+**Installer telah dihapus untuk keamanan. Gunakan setup manual:**
 
-### 5. Installasi Manual
-```bash
-# Import database schema
-mysql -u root -p < database/schema.sql
+1. **Setup Database:**
+   ```bash
+   # Buat database
+   mysql -u root -p -e "CREATE DATABASE testweb_jersey CHARACTER SET utf8mb4 COLLATE utf8mb4_unicode_ci;"
+   
+   # Import schema
+   mysql -u root -p testweb_jersey < database/schema.sql
+   ```
 
-# Set permissions
-chmod 755 public/uploads
-chmod 644 .env
-```
+2. **Konfigurasi Environment:**
+   ```bash
+   # Copy environment file
+   cp .env.example .env
+   
+   # Edit .env dengan kredensial database Anda
+   nano .env
+   ```
+
+3. **Set Permissions:**
+   ```bash
+   chmod -R 755 storage/
+   chmod -R 755 public/uploads/
+   chmod 644 .env
+   ```
+
+4. **Setup Admin User:**
+   ```sql
+   -- Update admin user (password: admin123)
+   UPDATE users SET 
+       username = 'admin',
+       email = 'admin@yourdomain.com',
+       password = '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi',
+       full_name = 'Administrator'
+   WHERE id = 1;
+   ```
+
+**Lihat `SETUP_MANUAL.md` untuk panduan lengkap setup manual.**
 
 ## Konfigurasi
 

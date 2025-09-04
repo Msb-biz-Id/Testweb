@@ -23,6 +23,12 @@ RewriteRule ^(.*)$ index.php [QSA,L]
     Options -Indexes
 </Directory>
 
+# Block access to installer files
+<Files "install.php">
+    Order allow,deny
+    Deny from all
+</Files>
+
 # Enable compression
 <IfModule mod_deflate.c>
     AddOutputFilterByType DEFLATE text/plain

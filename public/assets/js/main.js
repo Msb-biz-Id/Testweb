@@ -3,6 +3,8 @@
 document.addEventListener('DOMContentLoaded', function() {
     
     // Initialize all features
+    initAOS();
+    initSwiper();
     initLazyLoading();
     initSearch();
     initSmoothScrolling();
@@ -21,6 +23,46 @@ document.addEventListener('DOMContentLoaded', function() {
         initServiceWorker();
     }
 });
+
+// AOS (Animate On Scroll) Initialization
+function initAOS() {
+    if (typeof AOS !== 'undefined') {
+        AOS.init({
+            duration: 800,
+            easing: 'ease-in-out',
+            once: true,
+            offset: 100
+        });
+    }
+}
+
+// Swiper Initialization
+function initSwiper() {
+    if (typeof Swiper !== 'undefined') {
+        // Testimonials Swiper
+        const testimonialsSwiper = new Swiper('.testimonials .swiper', {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            autoplay: {
+                delay: 5000,
+                disableOnInteraction: false,
+            },
+            pagination: {
+                el: '.swiper-pagination',
+                clickable: true,
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                },
+                1024: {
+                    slidesPerView: 3,
+                }
+            }
+        });
+    }
+}
 
 // Lazy Loading Implementation
 function initLazyLoading() {

@@ -1,31 +1,28 @@
 <!DOCTYPE html>
-<html lang="id" dir="ltr">
+<html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <title><?= htmlspecialchars($pageTitle ?? 'Testweb Jersey - Premium Jersey Collection') ?></title>
     
     <!-- SEO Meta Tags -->
-    <title><?= htmlspecialchars($pageTitle ?? 'Testweb Jersey') ?></title>
-    <meta name="description" content="<?= htmlspecialchars($pageDescription ?? 'Jersey berkualitas tinggi dengan desain terbaik') ?>">
-    <meta name="keywords" content="<?= htmlspecialchars($pageKeywords ?? 'jersey, baju olahraga, jersey sepak bola, jersey basket, jersey custom') ?>">
-    <meta name="author" content="<?= htmlspecialchars($config['site_name'] ?? 'Testweb Jersey') ?>">
+    <meta name="description" content="<?= htmlspecialchars($pageDescription ?? 'Jersey berkualitas tinggi dengan desain terbaik untuk sepak bola, basket, dan olahraga lainnya. Custom jersey dengan kualitas premium.') ?>">
+    <meta name="keywords" content="<?= htmlspecialchars($pageKeywords ?? 'jersey, baju olahraga, jersey sepak bola, jersey basket, jersey custom, jersey premium, jersey berkualitas') ?>">
+    <meta name="author" content="Testweb Jersey">
     <meta name="robots" content="index, follow">
-    <meta name="language" content="Indonesian">
     
     <!-- Open Graph Meta Tags -->
-    <meta property="og:title" content="<?= htmlspecialchars($pageTitle ?? 'Testweb Jersey') ?>">
-    <meta property="og:description" content="<?= htmlspecialchars($pageDescription ?? 'Jersey berkualitas tinggi dengan desain terbaik') ?>">
+    <meta property="og:title" content="<?= htmlspecialchars($pageTitle ?? 'Testweb Jersey - Premium Jersey Collection') ?>">
+    <meta property="og:description" content="<?= htmlspecialchars($pageDescription ?? 'Jersey berkualitas tinggi dengan desain terbaik untuk sepak bola, basket, dan olahraga lainnya.') ?>">
     <meta property="og:type" content="<?= htmlspecialchars($pageType ?? 'website') ?>">
     <meta property="og:url" content="<?= htmlspecialchars($pageUrl ?? 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) ?>">
     <meta property="og:image" content="<?= htmlspecialchars($pageImage ?? '/assets/images/og-image.jpg') ?>">
-    <meta property="og:site_name" content="<?= htmlspecialchars($config['site_name'] ?? 'Testweb Jersey') ?>">
-    <meta property="og:locale" content="id_ID">
+    <meta property="og:site_name" content="Testweb Jersey">
     
     <!-- Twitter Card Meta Tags -->
     <meta name="twitter:card" content="summary_large_image">
-    <meta name="twitter:title" content="<?= htmlspecialchars($pageTitle ?? 'Testweb Jersey') ?>">
-    <meta name="twitter:description" content="<?= htmlspecialchars($pageDescription ?? 'Jersey berkualitas tinggi dengan desain terbaik') ?>">
+    <meta name="twitter:title" content="<?= htmlspecialchars($pageTitle ?? 'Testweb Jersey - Premium Jersey Collection') ?>">
+    <meta name="twitter:description" content="<?= htmlspecialchars($pageDescription ?? 'Jersey berkualitas tinggi dengan desain terbaik untuk sepak bola, basket, dan olahraga lainnya.') ?>">
     <meta name="twitter:image" content="<?= htmlspecialchars($pageImage ?? '/assets/images/og-image.jpg') ?>">
     
     <!-- Canonical URL -->
@@ -36,156 +33,208 @@
     <link rel="apple-touch-icon" sizes="180x180" href="/assets/images/apple-touch-icon.png">
     <link rel="icon" type="image/png" sizes="32x32" href="/assets/images/favicon-32x32.png">
     <link rel="icon" type="image/png" sizes="16x16" href="/assets/images/favicon-16x16.png">
-    <link rel="manifest" href="/assets/images/site.webmanifest">
     
-    <!-- Preconnect to external domains -->
-    <link rel="preconnect" href="https://cdn.jsdelivr.net">
-    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <!-- Preconnect for performance -->
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
     
-    <!-- Fonts -->
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <!-- Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:ital,wght@0,300;0,400;0,600;0,700;0,800;1,400&display=swap" rel="stylesheet">
     
-    <!-- CSS -->
+    <!-- Bootstrap CSS -->
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
-    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
-    <link href="/assets/css/style.css" rel="stylesheet">
+    
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Animate.css -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/animate.css/4.1.1/animate.min.css">
+    
+    <!-- AOS (Animate On Scroll) -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.css">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="/assets/css/style.css">
+    
+    <!-- PWA Manifest -->
+    <link rel="manifest" href="/assets/images/site.webmanifest">
+    
+    <!-- Additional CSS -->
+    <?php if (isset($additionalCSS)): ?>
+        <?php foreach ($additionalCSS as $css): ?>
+            <link rel="stylesheet" href="<?= htmlspecialchars($css) ?>">
+        <?php endforeach; ?>
+    <?php endif; ?>
     
     <!-- Structured Data -->
-    <?php if (isset($structuredData)): ?>
-        <?= $structuredData ?>
-    <?php endif; ?>
+    <script type="application/ld+json">
+    {
+        "@context": "https://schema.org",
+        "@type": "Organization",
+        "name": "Testweb Jersey",
+        "url": "<?= htmlspecialchars('http://' . $_SERVER['HTTP_HOST']) ?>",
+        "logo": "<?= htmlspecialchars('http://' . $_SERVER['HTTP_HOST'] . '/assets/images/logo.png') ?>",
+        "description": "Jersey berkualitas tinggi dengan desain terbaik untuk sepak bola, basket, dan olahraga lainnya",
+        "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "ID"
+        },
+        "contactPoint": {
+            "@type": "ContactPoint",
+            "telephone": "+62-812-3456-7890",
+            "contactType": "customer service"
+        }
+    }
+    </script>
     
     <!-- Google Analytics -->
     <?php if (isset($config['google_analytics_id']) && !empty($config['google_analytics_id'])): ?>
+    <!-- Google tag (gtag.js) -->
     <script async src="https://www.googletagmanager.com/gtag/js?id=<?= htmlspecialchars($config['google_analytics_id']) ?>"></script>
     <script>
         window.dataLayer = window.dataLayer || [];
         function gtag(){dataLayer.push(arguments);}
         gtag('js', new Date());
-        gtag('config', '<?= htmlspecialchars($config['google_analytics_id']) ?>', {
-            page_title: '<?= htmlspecialchars($pageTitle ?? 'Testweb Jersey') ?>',
-            page_location: '<?= htmlspecialchars($pageUrl ?? 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) ?>'
-        });
+        gtag('config', '<?= htmlspecialchars($config['google_analytics_id']) ?>');
     </script>
     <?php endif; ?>
 </head>
 <body>
-    <!-- Skip to content link for accessibility -->
+    <!-- Skip to main content for accessibility -->
     <a href="#main-content" class="skip-link">Skip to main content</a>
     
     <!-- Header -->
-    <header class="navbar navbar-expand-lg navbar-light bg-white shadow-sm" role="banner">
-        <div class="container">
-            <a class="navbar-brand fw-bold text-primary" href="/">
-                <i class="fas fa-tshirt me-2"></i>
-                <?= htmlspecialchars($config['site_name'] ?? 'Testweb Jersey') ?>
+    <header id="header" class="header fixed-top">
+        <div class="container-fluid container-xl d-flex align-items-center justify-content-between">
+            <a href="/" class="logo d-flex align-items-center">
+                <img src="/assets/images/logo.png" alt="Testweb Jersey" height="40">
+                <span class="logo-text">Testweb Jersey</span>
             </a>
             
-            <button class="navbar-toggler" type="button" data-bs-toggle="collapse" data-bs-target="#navbarNav">
-                <span class="navbar-toggler-icon"></span>
-            </button>
-            
-            <div class="collapse navbar-collapse" id="navbarNav">
-                <nav class="navbar-nav me-auto" role="navigation" aria-label="Main navigation">
-                    <ul class="navbar-nav">
-                        <li class="nav-item">
-                            <a class="nav-link <?= $_SERVER['REQUEST_URI'] === '/' ? 'active' : '' ?>" href="/" aria-current="<?= $_SERVER['REQUEST_URI'] === '/' ? 'page' : 'false' ?>">Beranda</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/produk') === 0 ? 'active' : '' ?>" href="/produk" aria-current="<?= strpos($_SERVER['REQUEST_URI'], '/produk') === 0 ? 'page' : 'false' ?>">Produk</a>
-                        </li>
-                        <li class="nav-item">
-                            <a class="nav-link <?= strpos($_SERVER['REQUEST_URI'], '/blog') === 0 ? 'active' : '' ?>" href="/blog" aria-current="<?= strpos($_SERVER['REQUEST_URI'], '/blog') === 0 ? 'page' : 'false' ?>">Blog</a>
-                        </li>
-                    </ul>
-                </nav>
-                
-                <!-- Search Form -->
-                <form class="d-flex me-3" action="/search" method="GET" role="search">
-                    <label for="search-input" class="visually-hidden">Search</label>
-                    <input id="search-input" class="form-control form-control-sm" type="search" name="q" placeholder="Cari produk atau artikel..." value="<?= htmlspecialchars($this->request->get('q', '')) ?>" aria-label="Search">
-                    <button class="btn btn-outline-primary btn-sm ms-2" type="submit" aria-label="Search">
-                        <i class="fas fa-search" aria-hidden="true"></i>
-                    </button>
-                </form>
-                
-                <!-- WhatsApp Button -->
-                <a href="https://wa.me/<?= htmlspecialchars($config['whatsapp_number'] ?? '6281234567890') ?>?text=<?= urlencode($config['whatsapp_message'] ?? 'Halo, saya tertarik dengan produk jersey Anda') ?>" 
-                   class="btn btn-success" target="_blank" rel="noopener noreferrer" aria-label="Contact us via WhatsApp">
-                    <i class="fab fa-whatsapp me-2" aria-hidden="true"></i>
-                    Hubungi Kami
-                </a>
-            </div>
+            <nav id="navbar" class="navbar">
+                <ul>
+                    <li><a class="nav-link scrollto active" href="#hero">Home</a></li>
+                    <li><a class="nav-link scrollto" href="#about">About</a></li>
+                    <li><a class="nav-link scrollto" href="#products">Products</a></li>
+                    <li><a class="nav-link scrollto" href="#testimonials">Testimonials</a></li>
+                    <li><a class="nav-link scrollto" href="#blog">Blog</a></li>
+                    <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                    <li><a class="getstarted scrollto" href="#products">Get Started</a></li>
+                </ul>
+                <i class="bi bi-list mobile-nav-toggle"></i>
+            </nav>
         </div>
     </header>
-
+    
     <!-- Main Content -->
     <main id="main-content" role="main">
         <?= $content ?>
     </main>
-
+    
     <!-- Footer -->
-    <footer class="bg-dark text-light py-5 mt-5">
+    <footer id="footer" class="footer">
         <div class="container">
-            <div class="row">
-                <div class="col-md-4">
-                    <h5 class="fw-bold mb-3">
-                        <i class="fas fa-tshirt me-2"></i>
-                        <?= htmlspecialchars($config['site_name'] ?? 'Testweb Jersey') ?>
-                    </h5>
-                    <p class="text-muted">
-                        <?= htmlspecialchars($config['site_description'] ?? 'Jersey berkualitas tinggi dengan desain terbaik') ?>
-                    </p>
+            <div class="row gy-4">
+                <div class="col-lg-5 col-md-12 footer-info">
+                    <a href="/" class="logo d-flex align-items-center">
+                        <span>Testweb Jersey</span>
+                    </a>
+                    <p>Jersey berkualitas tinggi dengan desain terbaik untuk kebutuhan olahraga Anda. Kami menyediakan jersey custom dengan kualitas premium.</p>
+                    <div class="social-links mt-3">
+                        <a href="#" class="twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="facebook"><i class="fab fa-facebook"></i></a>
+                        <a href="#" class="instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="linkedin"><i class="fab fa-linkedin"></i></a>
+                    </div>
                 </div>
                 
-                <div class="col-md-4">
-                    <h6 class="fw-bold mb-3">Menu</h6>
-                    <ul class="list-unstyled">
-                        <li><a href="/" class="text-muted text-decoration-none">Beranda</a></li>
-                        <li><a href="/produk" class="text-muted text-decoration-none">Produk</a></li>
-                        <li><a href="/blog" class="text-muted text-decoration-none">Blog</a></li>
+                <div class="col-lg-2 col-6 footer-links">
+                    <h4>Useful Links</h4>
+                    <ul>
+                        <li><a href="#hero">Home</a></li>
+                        <li><a href="#about">About us</a></li>
+                        <li><a href="#products">Products</a></li>
+                        <li><a href="#testimonials">Testimonials</a></li>
                     </ul>
                 </div>
                 
-                <div class="col-md-4">
-                    <h6 class="fw-bold mb-3">Kontak</h6>
-                    <p class="text-muted mb-2">
-                        <i class="fab fa-whatsapp me-2"></i>
-                        <a href="https://wa.me/<?= htmlspecialchars($config['whatsapp_number'] ?? '6281234567890') ?>" 
-                           class="text-muted text-decoration-none" target="_blank">
-                            <?= htmlspecialchars($config['whatsapp_number'] ?? '6281234567890') ?>
-                        </a>
-                    </p>
+                <div class="col-lg-2 col-6 footer-links">
+                    <h4>Our Services</h4>
+                    <ul>
+                        <li><a href="#products">Custom Jersey</a></li>
+                        <li><a href="#products">Team Jersey</a></li>
+                        <li><a href="#products">Sports Apparel</a></li>
+                        <li><a href="#contact">Design Service</a></li>
+                    </ul>
                 </div>
-            </div>
-            
-            <hr class="my-4">
-            
-            <div class="row align-items-center">
-                <div class="col-md-6">
-                    <p class="text-muted mb-0">
-                        &copy; <?= date('Y') ?> <?= htmlspecialchars($config['site_name'] ?? 'Testweb Jersey') ?>. All rights reserved.
+                
+                <div class="col-lg-3 col-md-12 footer-contact text-center text-md-start">
+                    <h4>Contact Us</h4>
+                    <p>
+                        A108 Adam Street <br>
+                        New York, NY 535022<br>
+                        United States <br><br>
+                        <strong>Phone:</strong> +1 5589 55488 55<br>
+                        <strong>Email:</strong> info@testwebjersey.com<br>
                     </p>
-                </div>
-                <div class="col-md-6 text-md-end">
-                    <a href="/admin/login" class="text-muted text-decoration-none">
-                        <i class="fas fa-lock me-1"></i>
-                        Admin
-                    </a>
                 </div>
             </div>
         </div>
+        
+        <div class="container mt-4">
+            <div class="copyright">
+                &copy; Copyright <strong><span>Testweb Jersey</span></strong>. All Rights Reserved
+            </div>
+            <div class="credits">
+                Designed by <a href="/">Testweb Jersey</a>
+            </div>
+        </div>
     </footer>
-
-    <!-- Scripts -->
+    
+    <!-- WhatsApp Button -->
+    <a href="https://wa.me/<?= htmlspecialchars($config['whatsapp_number'] ?? '6281234567890') ?>?text=<?= urlencode($config['whatsapp_message'] ?? 'Halo, saya tertarik dengan produk jersey Anda') ?>" 
+       class="whatsapp-button" 
+       target="_blank" 
+       rel="noopener noreferrer"
+       aria-label="Contact us on WhatsApp">
+        <i class="fab fa-whatsapp"></i>
+    </a>
+    
+    <!-- Back to Top Button -->
+    <a href="#" class="back-to-top d-flex align-items-center justify-content-center">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+    
+    <!-- Bootstrap JS -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+    
+    <!-- AOS (Animate On Scroll) -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@8/swiper-bundle.min.js"></script>
+    
+    <!-- Custom JS -->
     <script src="/assets/js/main.js"></script>
     
-    <!-- reCAPTCHA -->
-    <?php if (isset($config['recaptcha_enabled']) && $config['recaptcha_enabled'] && isset($config['recaptcha_site_key'])): ?>
-    <script src="https://www.google.com/recaptcha/api.js" async defer></script>
+    <!-- Service Worker -->
+    <script>
+        if ('serviceWorker' in navigator) {
+            window.addEventListener('load', function() {
+                navigator.serviceWorker.register('/sw.js');
+            });
+        }
+    </script>
+    
+    <!-- Additional JS -->
+    <?php if (isset($additionalJS)): ?>
+        <?php foreach ($additionalJS as $js): ?>
+            <script src="<?= htmlspecialchars($js) ?>"></script>
+        <?php endforeach; ?>
     <?php endif; ?>
 </body>
 </html>

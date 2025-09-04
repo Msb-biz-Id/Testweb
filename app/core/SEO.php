@@ -3,254 +3,520 @@
 namespace App\Core;
 
 /**
- * SEO Helper Class
- * Handles SEO-related operations
+ * SEO Management Class - RankMath Inspired
+ * Comprehensive SEO optimization for Testweb Jersey
  */
 class SEO
 {
+    private $db;
+    private $config;
+    
+    public function __construct()
+    {
+        $this->db = Database::getInstance();
+        $this->config = require __DIR__ . '/../../config/app.php';
+    }
+    
     /**
-     * Generate meta tags
+     * Generate comprehensive meta tags for any page
      */
-    public static function generateMetaTags($data = [])
+    public function generateMetaTags($pageData = [])
     {
         $defaults = [
-            'title' => 'Testweb Jersey - Jersey Berkualitas Tinggi',
-            'description' => 'Temukan jersey berkualitas tinggi dengan desain terbaik di Testweb Jersey',
-            'keywords' => 'jersey, baju olahraga, jersey sepak bola, jersey basket',
-            'image' => '/assets/images/og-image.jpg',
-            'url' => self::getCurrentUrl(),
+            'title' => $this->config['meta_title_default'] ?? 'Testweb Jersey - Premium Jersey Collection',
+            'description' => $this->config['meta_description_default'] ?? 'Jersey berkualitas tinggi dengan desain terbaik untuk sepak bola, basket, dan olahraga lainnya.',
+            'keywords' => 'jersey, baju olahraga, jersey sepak bola, jersey basket, jersey custom, jersey premium',
+            'image' => $this->config['site_url'] . '/assets/images/og-image.jpg',
+            'url' => $this->getCurrentUrl(),
             'type' => 'website',
-            'site_name' => 'Testweb Jersey'
+            'author' => 'Testweb Jersey',
+            'robots' => 'index, follow',
+            'canonical' => $this->getCurrentUrl(),
+            'locale' => 'id_ID',
+            'site_name' => $this->config['site_name'] ?? 'Testweb Jersey'
         ];
         
-        $meta = array_merge($defaults, $data);
+        $meta = array_merge($defaults, $pageData);
         
-        $tags = [];
-        
-        // Basic meta tags
-        $tags[] = '<title>' . htmlspecialchars($meta['title']) . '</title>';
-        $tags[] = '<meta name="description" content="' . htmlspecialchars($meta['description']) . '">';
-        $tags[] = '<meta name="keywords" content="' . htmlspecialchars($meta['keywords']) . '">';
-        $tags[] = '<meta name="author" content="' . htmlspecialchars($meta['site_name']) . '">';
-        $tags[] = '<meta name="robots" content="index, follow">';
-        $tags[] = '<meta name="viewport" content="width=device-width, initial-scale=1.0">';
-        
-        // Open Graph tags
-        $tags[] = '<meta property="og:title" content="' . htmlspecialchars($meta['title']) . '">';
-        $tags[] = '<meta property="og:description" content="' . htmlspecialchars($meta['description']) . '">';
-        $tags[] = '<meta property="og:image" content="' . htmlspecialchars($meta['image']) . '">';
-        $tags[] = '<meta property="og:url" content="' . htmlspecialchars($meta['url']) . '">';
-        $tags[] = '<meta property="og:type" content="' . htmlspecialchars($meta['type']) . '">';
-        $tags[] = '<meta property="og:site_name" content="' . htmlspecialchars($meta['site_name']) . '">';
-        
-        // Twitter Card tags
-        $tags[] = '<meta name="twitter:card" content="summary_large_image">';
-        $tags[] = '<meta name="twitter:title" content="' . htmlspecialchars($meta['title']) . '">';
-        $tags[] = '<meta name="twitter:description" content="' . htmlspecialchars($meta['description']) . '">';
-        $tags[] = '<meta name="twitter:image" content="' . htmlspecialchars($meta['image']) . '">';
-        
-        // Canonical URL
-        $tags[] = '<link rel="canonical" href="' . htmlspecialchars($meta['url']) . '">';
-        
-        // Language
-        $tags[] = '<meta http-equiv="content-language" content="id">';
-        
-        // Additional meta tags
-        if (isset($meta['published_time'])) {
-            $tags[] = '<meta property="article:published_time" content="' . $meta['published_time'] . '">';
-        }
-        
-        if (isset($meta['modified_time'])) {
-            $tags[] = '<meta property="article:modified_time" content="' . $meta['modified_time'] . '">';
-        }
-        
-        if (isset($meta['author'])) {
-            $tags[] = '<meta property="article:author" content="' . htmlspecialchars($meta['author']) . '">';
-        }
-        
-        return implode("\n    ", $tags);
+        return [
+            'title' => $this->optimizeTitle($meta['title']),
+            'description' => $this->optimizeDescription($meta['description']),
+            'keywords' => $this->optimizeKeywords($meta['keywords']),
+            'image' => $meta['image'],
+            'url' => $meta['url'],
+            'type' => $meta['type'],
+            'author' => $meta['author'],
+            'robots' => $meta['robots'],
+            'canonical' => $meta['canonical'],
+            'locale' => $meta['locale'],
+            'site_name' => $meta['site_name']
+        ];
     }
-
+    
     /**
      * Generate structured data (JSON-LD)
      */
-    public static function generateStructuredData($type, $data)
+    public function generateStructuredData($type = 'website', $data = [])
     {
-        $structuredData = [
-            '@context' => 'https://schema.org',
-            '@type' => $type
-        ];
+        $baseUrl = $this->config['site_url'];
+        $siteName = $this->config['site_name'] ?? 'Testweb Jersey';
         
         switch ($type) {
-            case 'Organization':
-                $structuredData = array_merge($structuredData, [
-                    'name' => $data['name'] ?? 'Testweb Jersey',
-                    'url' => $data['url'] ?? self::getCurrentUrl(),
-                    'logo' => $data['logo'] ?? '/assets/images/logo.png',
-                    'description' => $data['description'] ?? 'Jersey berkualitas tinggi dengan desain terbaik',
+            case 'website':
+                return [
+                    '@context' => 'https://schema.org',
+                    '@type' => 'WebSite',
+                    'name' => $siteName,
+                    'url' => $baseUrl,
+                    'description' => $this->config['meta_description_default'] ?? '',
+                    'potentialAction' => [
+                        '@type' => 'SearchAction',
+                        'target' => $baseUrl . '/search?q={search_term_string}',
+                        'query-input' => 'required name=search_term_string'
+                    ]
+                ];
+                
+            case 'organization':
+                return [
+                    '@context' => 'https://schema.org',
+                    '@type' => 'Organization',
+                    'name' => $siteName,
+                    'url' => $baseUrl,
+                    'logo' => $baseUrl . '/assets/images/logo.png',
+                    'description' => $this->config['meta_description_default'] ?? '',
+                    'address' => [
+                        '@type' => 'PostalAddress',
+                        'addressCountry' => 'ID',
+                        'addressLocality' => 'Jakarta',
+                        'addressRegion' => 'DKI Jakarta'
+                    ],
                     'contactPoint' => [
                         '@type' => 'ContactPoint',
-                        'telephone' => $data['phone'] ?? '+62-812-3456-7890',
+                        'telephone' => '+62-812-3456-7890',
                         'contactType' => 'customer service',
                         'availableLanguage' => 'Indonesian'
                     ],
-                    'sameAs' => $data['social_media'] ?? []
-                ]);
-                break;
+                    'sameAs' => [
+                        'https://www.facebook.com/testwebjersey',
+                        'https://www.instagram.com/testwebjersey',
+                        'https://www.twitter.com/testwebjersey'
+                    ]
+                ];
                 
-            case 'Product':
-                $structuredData = array_merge($structuredData, [
-                    'name' => $data['name'],
-                    'description' => $data['description'],
-                    'image' => $data['images'] ?? [],
+            case 'product':
+                return [
+                    '@context' => 'https://schema.org',
+                    '@type' => 'Product',
+                    'name' => $data['name'] ?? '',
+                    'description' => $data['description'] ?? '',
+                    'image' => $data['image'] ?? '',
                     'brand' => [
                         '@type' => 'Brand',
-                        'name' => 'Testweb Jersey'
+                        'name' => $siteName
                     ],
                     'offers' => [
                         '@type' => 'Offer',
-                        'price' => $data['price'],
+                        'price' => $data['price'] ?? '0',
                         'priceCurrency' => 'IDR',
-                        'availability' => $data['availability'] ?? 'https://schema.org/InStock',
-                        'url' => $data['url']
+                        'availability' => 'https://schema.org/InStock'
+                    ],
+                    'aggregateRating' => [
+                        '@type' => 'AggregateRating',
+                        'ratingValue' => $data['rating'] ?? '5',
+                        'reviewCount' => $data['review_count'] ?? '1'
                     ]
-                ]);
-                break;
+                ];
                 
-            case 'Article':
-                $structuredData = array_merge($structuredData, [
-                    'headline' => $data['title'],
-                    'description' => $data['description'],
-                    'image' => $data['image'],
+            case 'article':
+                return [
+                    '@context' => 'https://schema.org',
+                    '@type' => 'Article',
+                    'headline' => $data['title'] ?? '',
+                    'description' => $data['description'] ?? '',
+                    'image' => $data['image'] ?? '',
                     'author' => [
                         '@type' => 'Person',
                         'name' => $data['author'] ?? 'Admin'
                     ],
                     'publisher' => [
                         '@type' => 'Organization',
-                        'name' => 'Testweb Jersey',
+                        'name' => $siteName,
                         'logo' => [
                             '@type' => 'ImageObject',
-                            'url' => '/assets/images/logo.png'
+                            'url' => $baseUrl . '/assets/images/logo.png'
                         ]
                     ],
-                    'datePublished' => $data['published_time'],
-                    'dateModified' => $data['modified_time'] ?? $data['published_time']
-                ]);
-                break;
+                    'datePublished' => $data['published_date'] ?? date('c'),
+                    'dateModified' => $data['modified_date'] ?? date('c')
+                ];
                 
-            case 'BreadcrumbList':
-                $structuredData['itemListElement'] = [];
-                foreach ($data['items'] as $index => $item) {
-                    $structuredData['itemListElement'][] = [
-                        '@type' => 'ListItem',
-                        'position' => $index + 1,
-                        'name' => $item['name'],
-                        'item' => $item['url']
-                    ];
-                }
-                break;
+            case 'job_posting':
+                return [
+                    '@context' => 'https://schema.org',
+                    '@type' => 'JobPosting',
+                    'title' => $data['title'] ?? '',
+                    'description' => $data['description'] ?? '',
+                    'datePosted' => $data['date_posted'] ?? date('c'),
+                    'validThrough' => $data['valid_through'] ?? date('c', strtotime('+30 days')),
+                    'employmentType' => $data['employment_type'] ?? 'FULL_TIME',
+                    'hiringOrganization' => [
+                        '@type' => 'Organization',
+                        'name' => $siteName,
+                        'sameAs' => $baseUrl
+                    ],
+                    'jobLocation' => [
+                        '@type' => 'Place',
+                        'address' => [
+                            '@type' => 'PostalAddress',
+                            'addressLocality' => 'Jakarta',
+                            'addressRegion' => 'DKI Jakarta',
+                            'addressCountry' => 'ID'
+                        ]
+                    ],
+                    'baseSalary' => [
+                        '@type' => 'MonetaryAmount',
+                        'currency' => 'IDR',
+                        'value' => [
+                            '@type' => 'QuantitativeValue',
+                            'minValue' => $data['salary_min'] ?? '0',
+                            'maxValue' => $data['salary_max'] ?? '0',
+                            'unitText' => 'MONTH'
+                        ]
+                    ]
+                ];
+                
+            default:
+                return [];
         }
-        
-        return '<script type="application/ld+json">' . json_encode($structuredData, JSON_UNESCAPED_SLASHES | JSON_UNESCAPED_UNICODE) . '</script>';
     }
-
+    
     /**
-     * Generate sitemap
+     * Generate XML Sitemap
      */
-    public static function generateSitemap($baseUrl)
+    public function generateSitemap()
     {
+        $baseUrl = $this->config['site_url'];
         $sitemap = '<?xml version="1.0" encoding="UTF-8"?>' . "\n";
         $sitemap .= '<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">' . "\n";
         
+        // Homepage
+        $sitemap .= $this->addSitemapUrl($baseUrl, '1.0', 'daily');
+        
         // Static pages
         $staticPages = [
-            ['url' => $baseUrl, 'priority' => '1.0', 'changefreq' => 'daily'],
-            ['url' => $baseUrl . '/produk', 'priority' => '0.9', 'changefreq' => 'weekly'],
-            ['url' => $baseUrl . '/blog', 'priority' => '0.8', 'changefreq' => 'weekly']
+            '/about' => ['priority' => '0.8', 'changefreq' => 'monthly'],
+            '/products' => ['priority' => '0.9', 'changefreq' => 'weekly'],
+            '/blog' => ['priority' => '0.8', 'changefreq' => 'weekly'],
+            '/careers' => ['priority' => '0.7', 'changefreq' => 'weekly'],
+            '/contact' => ['priority' => '0.6', 'changefreq' => 'monthly']
         ];
         
-        foreach ($staticPages as $page) {
-            $sitemap .= '  <url>' . "\n";
-            $sitemap .= '    <loc>' . htmlspecialchars($page['url']) . '</loc>' . "\n";
-            $sitemap .= '    <priority>' . $page['priority'] . '</priority>' . "\n";
-            $sitemap .= '    <changefreq>' . $page['changefreq'] . '</changefreq>' . "\n";
-            $sitemap .= '  </url>' . "\n";
+        foreach ($staticPages as $page => $settings) {
+            $sitemap .= $this->addSitemapUrl($baseUrl . $page, $settings['priority'], $settings['changefreq']);
+        }
+        
+        // Products
+        $products = $this->getProducts();
+        foreach ($products as $product) {
+            $sitemap .= $this->addSitemapUrl(
+                $baseUrl . '/products/' . $product['slug'],
+                '0.8',
+                'weekly',
+                $product['updated_at']
+            );
+        }
+        
+        // Blog posts
+        $posts = $this->getPosts();
+        foreach ($posts as $post) {
+            $sitemap .= $this->addSitemapUrl(
+                $baseUrl . '/blog/' . $post['slug'],
+                '0.7',
+                'monthly',
+                $post['updated_at']
+            );
+        }
+        
+        // Career posts
+        $careers = $this->getCareers();
+        foreach ($careers as $career) {
+            $sitemap .= $this->addSitemapUrl(
+                $baseUrl . '/careers/' . $career['slug'],
+                '0.6',
+                'weekly',
+                $career['updated_at']
+            );
         }
         
         $sitemap .= '</urlset>';
         
         return $sitemap;
     }
-
+    
     /**
      * Generate robots.txt
      */
-    public static function generateRobotsTxt($baseUrl)
+    public function generateRobotsTxt()
     {
+        $baseUrl = $this->config['site_url'];
+        
         $robots = "User-agent: *\n";
         $robots .= "Allow: /\n";
         $robots .= "Disallow: /admin/\n";
+        $robots .= "Disallow: /api/\n";
         $robots .= "Disallow: /storage/\n";
         $robots .= "Disallow: /config/\n";
-        $robots .= "Disallow: /app/\n";
-        $robots .= "Disallow: /database/\n";
-        $robots .= "Disallow: /*.sql\n";
-        $robots .= "Disallow: /*.env\n";
-        $robots .= "Disallow: /install.php\n";
+        $robots .= "Disallow: /*.sql$\n";
+        $robots .= "Disallow: /*.log$\n";
         $robots .= "\n";
         $robots .= "Sitemap: {$baseUrl}/sitemap.xml\n";
+        $robots .= "Sitemap: {$baseUrl}/sitemap-products.xml\n";
+        $robots .= "Sitemap: {$baseUrl}/sitemap-blog.xml\n";
+        $robots .= "Sitemap: {$baseUrl}/sitemap-careers.xml\n";
         
         return $robots;
     }
-
+    
     /**
-     * Get current URL
+     * Analyze page SEO score
      */
-    private static function getCurrentUrl()
+    public function analyzeSEOScore($content, $meta = [])
     {
-        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
-        $host = $_SERVER['HTTP_HOST'] ?? 'localhost';
-        $uri = $_SERVER['REQUEST_URI'] ?? '/';
+        $score = 0;
+        $maxScore = 100;
+        $issues = [];
+        $suggestions = [];
         
-        return $protocol . '://' . $host . $uri;
+        // Title analysis
+        if (empty($meta['title'])) {
+            $issues[] = 'Missing page title';
+        } else {
+            $titleLength = strlen($meta['title']);
+            if ($titleLength < 30) {
+                $issues[] = 'Title too short (less than 30 characters)';
+            } elseif ($titleLength > 60) {
+                $issues[] = 'Title too long (more than 60 characters)';
+            } else {
+                $score += 15;
+            }
+        }
+        
+        // Description analysis
+        if (empty($meta['description'])) {
+            $issues[] = 'Missing meta description';
+        } else {
+            $descLength = strlen($meta['description']);
+            if ($descLength < 120) {
+                $issues[] = 'Meta description too short (less than 120 characters)';
+            } elseif ($descLength > 160) {
+                $issues[] = 'Meta description too long (more than 160 characters)';
+            } else {
+                $score += 15;
+            }
+        }
+        
+        // Content analysis
+        $contentLength = strlen(strip_tags($content));
+        if ($contentLength < 300) {
+            $issues[] = 'Content too short (less than 300 words)';
+        } else {
+            $score += 20;
+        }
+        
+        // Heading structure
+        if (strpos($content, '<h1>') === false) {
+            $issues[] = 'Missing H1 heading';
+        } else {
+            $score += 10;
+        }
+        
+        // Image alt tags
+        preg_match_all('/<img[^>]+>/i', $content, $images);
+        $imagesWithAlt = 0;
+        foreach ($images[0] as $img) {
+            if (strpos($img, 'alt=') !== false) {
+                $imagesWithAlt++;
+            }
+        }
+        
+        if (count($images[0]) > 0) {
+            $altPercentage = ($imagesWithAlt / count($images[0])) * 100;
+            if ($altPercentage < 80) {
+                $issues[] = 'Some images missing alt tags';
+            } else {
+                $score += 10;
+            }
+        }
+        
+        // Internal links
+        preg_match_all('/<a[^>]+href=["\']([^"\']+)["\'][^>]*>/i', $content, $links);
+        $internalLinks = 0;
+        foreach ($links[1] as $link) {
+            if (strpos($link, $this->config['site_url']) !== false || strpos($link, '/') === 0) {
+                $internalLinks++;
+            }
+        }
+        
+        if ($internalLinks > 0) {
+            $score += 10;
+        } else {
+            $suggestions[] = 'Add internal links to improve SEO';
+        }
+        
+        // Keyword density
+        if (!empty($meta['keywords'])) {
+            $keywords = explode(',', $meta['keywords']);
+            $keywordDensity = 0;
+            foreach ($keywords as $keyword) {
+                $keyword = trim($keyword);
+                $count = substr_count(strtolower($content), strtolower($keyword));
+                $density = ($count / $contentLength) * 100;
+                if ($density > 0.5 && $density < 3) {
+                    $keywordDensity++;
+                }
+            }
+            
+            if ($keywordDensity > 0) {
+                $score += 10;
+            } else {
+                $suggestions[] = 'Optimize keyword density (0.5-3%)';
+            }
+        }
+        
+        // Page speed suggestions
+        $suggestions[] = 'Optimize images for faster loading';
+        $suggestions[] = 'Minify CSS and JavaScript';
+        $suggestions[] = 'Enable browser caching';
+        
+        return [
+            'score' => $score,
+            'max_score' => $maxScore,
+            'percentage' => round(($score / $maxScore) * 100),
+            'issues' => $issues,
+            'suggestions' => $suggestions
+        ];
     }
-
+    
     /**
-     * Generate breadcrumb data
+     * Generate breadcrumb schema
      */
-    public static function generateBreadcrumb($items)
+    public function generateBreadcrumbSchema($breadcrumbs)
     {
-        $breadcrumb = [
+        $baseUrl = $this->config['site_url'];
+        
+        $schema = [
             '@context' => 'https://schema.org',
             '@type' => 'BreadcrumbList',
             'itemListElement' => []
         ];
         
-        foreach ($items as $index => $item) {
-            $breadcrumb['itemListElement'][] = [
+        $position = 1;
+        foreach ($breadcrumbs as $breadcrumb) {
+            $schema['itemListElement'][] = [
                 '@type' => 'ListItem',
-                'position' => $index + 1,
-                'name' => $item['name'],
-                'item' => $item['url']
+                'position' => $position,
+                'name' => $breadcrumb['title'],
+                'item' => $baseUrl . $breadcrumb['url']
             ];
+            $position++;
         }
         
-        return $breadcrumb;
+        return $schema;
     }
-
+    
     /**
-     * Optimize image for SEO
+     * Private helper methods
      */
-    public static function optimizeImageForSEO($imagePath, $alt, $title = null)
+    private function optimizeTitle($title)
     {
-        return [
-            'src' => $imagePath,
-            'alt' => $alt,
-            'title' => $title ?: $alt,
-            'loading' => 'lazy',
-            'width' => 'auto',
-            'height' => 'auto'
-        ];
+        $title = trim($title);
+        $siteName = $this->config['site_name'] ?? 'Testweb Jersey';
+        
+        // Add site name if not present and title is not too long
+        if (strpos($title, $siteName) === false && strlen($title) < 50) {
+            $title .= ' - ' . $siteName;
+        }
+        
+        return $title;
+    }
+    
+    private function optimizeDescription($description)
+    {
+        $description = trim($description);
+        
+        // Ensure description is within optimal length
+        if (strlen($description) > 160) {
+            $description = substr($description, 0, 157) . '...';
+        }
+        
+        return $description;
+    }
+    
+    private function optimizeKeywords($keywords)
+    {
+        if (is_string($keywords)) {
+            $keywords = explode(',', $keywords);
+        }
+        
+        $keywords = array_map('trim', $keywords);
+        $keywords = array_filter($keywords);
+        $keywords = array_unique($keywords);
+        
+        return implode(', ', array_slice($keywords, 0, 10)); // Max 10 keywords
+    }
+    
+    private function getCurrentUrl()
+    {
+        $protocol = isset($_SERVER['HTTPS']) && $_SERVER['HTTPS'] === 'on' ? 'https' : 'http';
+        return $protocol . '://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI'];
+    }
+    
+    private function addSitemapUrl($url, $priority, $changefreq, $lastmod = null)
+    {
+        $xml = "  <url>\n";
+        $xml .= "    <loc>" . htmlspecialchars($url) . "</loc>\n";
+        $xml .= "    <priority>" . $priority . "</priority>\n";
+        $xml .= "    <changefreq>" . $changefreq . "</changefreq>\n";
+        
+        if ($lastmod) {
+            $xml .= "    <lastmod>" . date('c', strtotime($lastmod)) . "</lastmod>\n";
+        }
+        
+        $xml .= "  </url>\n";
+        
+        return $xml;
+    }
+    
+    private function getProducts()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT slug, updated_at FROM products WHERE status = 'active' ORDER BY updated_at DESC");
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+    
+    private function getPosts()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT slug, updated_at FROM posts WHERE status = 'published' ORDER BY updated_at DESC");
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return [];
+        }
+    }
+    
+    private function getCareers()
+    {
+        try {
+            $stmt = $this->db->prepare("SELECT slug, updated_at FROM careers WHERE status = 'active' ORDER BY updated_at DESC");
+            $stmt->execute();
+            return $stmt->fetchAll(\PDO::FETCH_ASSOC);
+        } catch (\Exception $e) {
+            return [];
+        }
     }
 }

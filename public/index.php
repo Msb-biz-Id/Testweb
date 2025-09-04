@@ -98,6 +98,25 @@ $router->get('/admin/dashboard', 'Admin\DashboardController@index', ['AuthMiddle
 $router->get('/admin/products', 'Admin\ProductController@index', ['AuthMiddleware']);
 $router->get('/admin/products/create', 'Admin\ProductController@create', ['AuthMiddleware']);
 $router->post('/admin/products', 'Admin\ProductController@store', ['AuthMiddleware']);
+
+// Career management
+$router->get('/careers', 'CareerController@index');
+$router->get('/careers/{slug}', 'CareerController@show');
+$router->post('/careers/apply', 'CareerController@apply');
+$router->get('/careers/search', 'CareerController@search');
+
+// Admin Career routes
+$router->get('/admin/careers', 'Admin\CareerController@index', ['AuthMiddleware']);
+$router->get('/admin/careers/create', 'Admin\CareerController@create', ['AuthMiddleware']);
+$router->post('/admin/careers/store', 'Admin\CareerController@store', ['AuthMiddleware']);
+$router->get('/admin/careers/edit/{id}', 'Admin\CareerController@edit', ['AuthMiddleware']);
+$router->post('/admin/careers/update/{id}', 'Admin\CareerController@update', ['AuthMiddleware']);
+$router->get('/admin/careers/delete/{id}', 'Admin\CareerController@delete', ['AuthMiddleware']);
+$router->get('/admin/careers/applications', 'Admin\CareerController@applications', ['AuthMiddleware']);
+$router->get('/admin/careers/applications/view/{id}', 'Admin\CareerController@viewApplication', ['AuthMiddleware']);
+$router->post('/admin/careers/applications/update-status', 'Admin\CareerController@updateApplicationStatus', ['AuthMiddleware']);
+$router->get('/admin/careers/applications/delete/{id}', 'Admin\CareerController@deleteApplication', ['AuthMiddleware']);
+$router->get('/admin/careers/applications/export', 'Admin\CareerController@exportApplications', ['AuthMiddleware']);
 $router->get('/admin/products/{id}/edit', 'Admin\ProductController@edit', ['AuthMiddleware']);
 $router->put('/admin/products/{id}', 'Admin\ProductController@update', ['AuthMiddleware']);
 $router->delete('/admin/products/{id}', 'Admin\ProductController@delete', ['AuthMiddleware']);

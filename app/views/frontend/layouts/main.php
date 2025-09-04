@@ -122,7 +122,8 @@
                     <li><a class="nav-link scrollto" href="#products">Products</a></li>
                     <li><a class="nav-link scrollto" href="#testimonials">Testimonials</a></li>
                     <li><a class="nav-link scrollto" href="#blog">Blog</a></li>
-                    <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                                            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                        <li><a class="nav-link" href="/careers">Careers</a></li>
                     <li><a class="getstarted scrollto" href="#products">Get Started</a></li>
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>

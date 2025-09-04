@@ -5,11 +5,17 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><?= htmlspecialchars($pageTitle ?? 'Testweb Jersey - Premium Jersey Collection') ?></title>
     
-    <!-- SEO Meta Tags -->
+    <!-- SEO Meta Tags - RankMath Style -->
     <meta name="description" content="<?= htmlspecialchars($pageDescription ?? 'Jersey berkualitas tinggi dengan desain terbaik untuk sepak bola, basket, dan olahraga lainnya. Custom jersey dengan kualitas premium.') ?>">
     <meta name="keywords" content="<?= htmlspecialchars($pageKeywords ?? 'jersey, baju olahraga, jersey sepak bola, jersey basket, jersey custom, jersey premium, jersey berkualitas') ?>">
     <meta name="author" content="Testweb Jersey">
     <meta name="robots" content="index, follow">
+    <meta name="googlebot" content="index, follow">
+    <meta name="bingbot" content="index, follow">
+    <meta name="language" content="Indonesian">
+    <meta name="revisit-after" content="7 days">
+    <meta name="distribution" content="global">
+    <meta name="rating" content="general">
     
     <!-- Open Graph Meta Tags -->
     <meta property="og:title" content="<?= htmlspecialchars($pageTitle ?? 'Testweb Jersey - Premium Jersey Collection') ?>">
@@ -24,6 +30,8 @@
     <meta name="twitter:title" content="<?= htmlspecialchars($pageTitle ?? 'Testweb Jersey - Premium Jersey Collection') ?>">
     <meta name="twitter:description" content="<?= htmlspecialchars($pageDescription ?? 'Jersey berkualitas tinggi dengan desain terbaik untuk sepak bola, basket, dan olahraga lainnya.') ?>">
     <meta name="twitter:image" content="<?= htmlspecialchars($pageImage ?? '/assets/images/og-image.jpg') ?>">
+    <meta name="twitter:site" content="@testwebjersey">
+    <meta name="twitter:creator" content="@testwebjersey">
     
     <!-- Canonical URL -->
     <link rel="canonical" href="<?= htmlspecialchars($pageUrl ?? 'http://' . $_SERVER['HTTP_HOST'] . $_SERVER['REQUEST_URI']) ?>">
@@ -62,6 +70,11 @@
     
     <!-- PWA Manifest -->
     <link rel="manifest" href="/assets/images/site.webmanifest">
+    
+    <!-- RankMath Style Additional Meta -->
+    <meta name="theme-color" content="#1e3a8a">
+    <meta name="msapplication-TileColor" content="#1e3a8a">
+    <meta name="msapplication-config" content="/assets/images/browserconfig.xml">
     
     <!-- Additional CSS -->
     <?php if (isset($additionalCSS)): ?>
@@ -122,7 +135,8 @@
                     <li><a class="nav-link scrollto" href="#products">Products</a></li>
                     <li><a class="nav-link scrollto" href="#testimonials">Testimonials</a></li>
                     <li><a class="nav-link scrollto" href="#blog">Blog</a></li>
-                    <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                                            <li><a class="nav-link scrollto" href="#contact">Contact</a></li>
+                        <li><a class="nav-link" href="/careers">Careers</a></li>
                     <li><a class="getstarted scrollto" href="#products">Get Started</a></li>
                 </ul>
                 <i class="bi bi-list mobile-nav-toggle"></i>

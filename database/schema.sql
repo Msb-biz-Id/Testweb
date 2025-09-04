@@ -194,3 +194,84 @@ INSERT INTO tags (name, slug) VALUES
 ('original', 'original'),
 ('limited', 'limited'),
 ('new', 'new');
+
+-- Table structure for table `careers`
+CREATE TABLE `careers` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `title` varchar(255) NOT NULL,
+  `slug` varchar(255) NOT NULL,
+  `description` text NOT NULL,
+  `requirements` text NOT NULL,
+  `responsibilities` text NOT NULL,
+  `benefits` text,
+  `employment_type` enum('full_time','part_time','contract','internship','freelance') NOT NULL DEFAULT 'full_time',
+  `experience_level` enum('entry','mid','senior','executive') NOT NULL DEFAULT 'entry',
+  `department` varchar(100) NOT NULL,
+  `location` varchar(255) NOT NULL,
+  `salary_min` decimal(10,2) DEFAULT NULL,
+  `salary_max` decimal(10,2) DEFAULT NULL,
+  `currency` varchar(3) DEFAULT 'IDR',
+  `application_deadline` date DEFAULT NULL,
+  `start_date` date DEFAULT NULL,
+  `status` enum('active','inactive','closed') NOT NULL DEFAULT 'active',
+  `featured` tinyint(1) NOT NULL DEFAULT 0,
+  `application_count` int(11) NOT NULL DEFAULT 0,
+  `views` int(11) NOT NULL DEFAULT 0,
+  `meta_title` varchar(255) DEFAULT NULL,
+  `meta_description` text,
+  `meta_keywords` text,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `slug` (`slug`),
+  KEY `status` (`status`),
+  KEY `employment_type` (`employment_type`),
+  KEY `department` (`department`),
+  KEY `featured` (`featured`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Table structure for table `job_applications`
+CREATE TABLE `job_applications` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `career_id` int(11) NOT NULL,
+  `full_name` varchar(255) NOT NULL,
+  `email` varchar(255) NOT NULL,
+  `phone` varchar(20) NOT NULL,
+  `cover_letter` text,
+  `resume_file` varchar(255) DEFAULT NULL,
+  `portfolio_url` varchar(255) DEFAULT NULL,
+  `linkedin_url` varchar(255) DEFAULT NULL,
+  `expected_salary` decimal(10,2) DEFAULT NULL,
+  `availability_date` date DEFAULT NULL,
+  `status` enum('pending','reviewed','shortlisted','interviewed','accepted','rejected') NOT NULL DEFAULT 'pending',
+  `notes` text,
+  `applied_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `updated_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  KEY `career_id` (`career_id`),
+  KEY `status` (`status`),
+  KEY `applied_at` (`applied_at`),
+  FOREIGN KEY (`career_id`) REFERENCES `careers` (`id`) ON DELETE CASCADE
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Table structure for table `seo_analytics`
+CREATE TABLE `seo_analytics` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `page_url` varchar(500) NOT NULL,
+  `page_title` varchar(255) NOT NULL,
+  `seo_score` int(11) NOT NULL DEFAULT 0,
+  `issues` text,
+  `suggestions` text,
+  `last_analyzed` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `created_at` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `page_url` (`page_url`),
+  KEY `seo_score` (`seo_score`),
+  KEY `last_analyzed` (`last_analyzed`)
+) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;
+
+-- Insert sample career positions
+INSERT INTO careers (title, slug, description, requirements, responsibilities, benefits, employment_type, experience_level, department, location, salary_min, salary_max, status, featured) VALUES
+('Frontend Developer', 'frontend-developer', 'Kami mencari Frontend Developer yang berpengalaman untuk mengembangkan website dan aplikasi web yang modern dan responsif.', 'Minimal 2 tahun pengalaman dalam pengembangan frontend, Menguasai HTML, CSS, JavaScript, React/Vue.js, Familiar dengan responsive design dan cross-browser compatibility', 'Mengembangkan dan memelihara website perusahaan, Membuat komponen UI yang reusable, Optimasi performa website, Berkolaborasi dengan tim design dan backend', 'Gaji kompetitif, Asuransi kesehatan, Bonus kinerja, Work from home fleksibel, Pelatihan dan pengembangan karir', 'full_time', 'mid', 'Technology', 'Jakarta Selatan', 8000000, 15000000, 'active', 1),
+('Marketing Specialist', 'marketing-specialist', 'Bergabunglah dengan tim marketing kami untuk mengembangkan strategi pemasaran digital dan meningkatkan brand awareness Testweb Jersey.', 'Minimal 1 tahun pengalaman di bidang digital marketing, Menguasai social media marketing, SEO, dan Google Ads, Kreatif dan memiliki analytical thinking', 'Mengelola social media accounts, Membuat konten marketing, Melakukan SEO optimization, Menganalisis campaign performance', 'Gaji kompetitif, Komisi penjualan, Asuransi kesehatan, Bonus kinerja, Pelatihan marketing tools', 'full_time', 'entry', 'Marketing', 'Jakarta Selatan', 6000000, 10000000, 'active', 1),
+('Graphic Designer', 'graphic-designer', 'Kami mencari Graphic Designer yang kreatif untuk membuat desain jersey dan materi marketing yang menarik.', 'Minimal 1 tahun pengalaman sebagai graphic designer, Menguasai Adobe Creative Suite (Photoshop, Illustrator, InDesign), Memiliki portfolio yang kuat', 'Mendesain jersey dan produk apparel, Membuat materi marketing dan branding, Berkolaborasi dengan tim marketing, Memastikan konsistensi brand', 'Gaji kompetitif, Asuransi kesehatan, Bonus kinerja, Creative freedom, Pelatihan design tools', 'full_time', 'entry', 'Design', 'Jakarta Selatan', 5000000, 9000000, 'active', 0);

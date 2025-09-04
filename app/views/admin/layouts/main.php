@@ -28,6 +28,10 @@
     <!-- PWA Manifest -->
     <link rel="manifest" href="/assets/images/site.webmanifest">
     
+    <!-- Admin SEO Meta -->
+    <meta name="robots" content="noindex, nofollow">
+    <meta name="theme-color" content="#1e3a8a">
+    
     <!-- Additional CSS -->
     <?php if (isset($additionalCSS)): ?>
         <?php foreach ($additionalCSS as $css): ?>
@@ -218,6 +222,68 @@
                                     <a href="/admin/categories" class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'categories') ? 'active' : '' ?>">
                                         <i class="far fa-circle nav-icon"></i>
                                         <p>Categories</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- Careers -->
+                        <li class="nav-item <?= (strpos($_SERVER['REQUEST_URI'], '/admin/careers') !== false) ? 'menu-open' : '' ?>">
+                            <a href="#" class="nav-link <?= (strpos($_SERVER['REQUEST_URI'], '/admin/careers') !== false) ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-briefcase"></i>
+                                <p>
+                                    Careers
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/admin/careers" class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'careers') ? 'active' : '' ?>">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>All Careers</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/admin/careers/create" class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'create') ? 'active' : '' ?>">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Add Career</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/admin/careers/applications" class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'applications') ? 'active' : '' ?>">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Applications</p>
+                                    </a>
+                                </li>
+                            </ul>
+                        </li>
+
+                        <!-- SEO -->
+                        <li class="nav-item <?= (strpos($_SERVER['REQUEST_URI'], '/admin/seo') !== false) ? 'menu-open' : '' ?>">
+                            <a href="#" class="nav-link <?= (strpos($_SERVER['REQUEST_URI'], '/admin/seo') !== false) ? 'active' : '' ?>">
+                                <i class="nav-icon fas fa-search"></i>
+                                <p>
+                                    SEO
+                                    <i class="right fas fa-angle-left"></i>
+                                </p>
+                            </a>
+                            <ul class="nav nav-treeview">
+                                <li class="nav-item">
+                                    <a href="/admin/seo/dashboard" class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'dashboard') ? 'active' : '' ?>">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>SEO Dashboard</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/admin/seo/analytics" class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'analytics') ? 'active' : '' ?>">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Analytics</p>
+                                    </a>
+                                </li>
+                                <li class="nav-item">
+                                    <a href="/admin/seo/redirects" class="nav-link <?= (basename($_SERVER['REQUEST_URI']) == 'redirects') ? 'active' : '' ?>">
+                                        <i class="far fa-circle nav-icon"></i>
+                                        <p>Redirects</p>
                                     </a>
                                 </li>
                             </ul>

@@ -1,17 +1,36 @@
 /* Testweb Jersey Admin Custom Styles */
 
 :root {
-    --primary-color: #007bff;
-    --secondary-color: #6c757d;
-    --success-color: #28a745;
-    --info-color: #17a2b8;
-    --warning-color: #ffc107;
-    --danger-color: #dc3545;
-    --light-color: #f8f9fa;
-    --dark-color: #343a40;
+    /* Jersey Theme Colors - Consistent with Frontend */
+    --primary-color: #1e3a8a;
+    --secondary-color: #dc2626;
+    --accent-color: #f59e0b;
+    --success-color: #10b981;
+    --info-color: #3b82f6;
+    --warning-color: #f59e0b;
+    --danger-color: #ef4444;
+    --light-color: #f8fafc;
+    --dark-color: #1e293b;
+    
+    /* Jersey Specific Colors */
     --jersey-blue: #1e3a8a;
     --jersey-red: #dc2626;
     --jersey-gold: #f59e0b;
+    
+    /* Typography */
+    --font-primary: 'Source Sans Pro', sans-serif;
+    --font-size-base: 16px;
+    --line-height-base: 1.6;
+    
+    /* Transitions */
+    --transition-base: all 0.3s ease;
+    --transition-fast: all 0.2s ease;
+    
+    /* Shadows */
+    --shadow-sm: 0 1px 2px 0 rgba(0, 0, 0, 0.05);
+    --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+    --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    --shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
 }
 
 /* Custom Brand Colors for Jersey Theme */

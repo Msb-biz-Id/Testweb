@@ -125,7 +125,7 @@ titleLabel.Size = UDim2.new(1, 0, 0, 40)
 titleLabel.Position = UDim2.new(0, 0, 0, 0)
 titleLabel.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
 titleLabel.BorderSizePixel = 0
-titleLabel.Text = "Fishing System"
+titleLabel.Text = "Sistem Mancing"
 titleLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 titleLabel.TextScaled = true
 titleLabel.Font = Enum.Font.SourceSansBold
@@ -155,7 +155,7 @@ moneyLabel.Name = "MoneyLabel"
 moneyLabel.Size = UDim2.new(0.5, -5, 0, 25)
 moneyLabel.Position = UDim2.new(0, 5, 0, 5)
 moneyLabel.BackgroundTransparency = 1
-moneyLabel.Text = "Money: $0"
+moneyLabel.Text = "Uang: $0"
 moneyLabel.TextColor3 = Color3.fromRGB(255, 215, 0)
 moneyLabel.TextScaled = true
 moneyLabel.Font = Enum.Font.SourceSansBold
@@ -167,7 +167,7 @@ rankLabel.Name = "RankLabel"
 rankLabel.Size = UDim2.new(0.5, -5, 0, 25)
 rankLabel.Position = UDim2.new(0.5, 0, 0, 5)
 rankLabel.BackgroundTransparency = 1
-rankLabel.Text = "Rank: Novice Fisher"
+rankLabel.Text = "Level: Pemula"
 rankLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 rankLabel.TextScaled = true
 rankLabel.Font = Enum.Font.SourceSansBold
@@ -179,7 +179,7 @@ expLabel.Name = "ExpLabel"
 expLabel.Size = UDim2.new(1, -10, 0, 25)
 expLabel.Position = UDim2.new(0, 5, 0, 30)
 expLabel.BackgroundTransparency = 1
-expLabel.Text = "Experience: 0/100"
+expLabel.Text = "XP: 0/100"
 expLabel.TextColor3 = Color3.fromRGB(100, 200, 255)
 expLabel.TextScaled = true
 expLabel.Font = Enum.Font.SourceSans
@@ -191,7 +191,7 @@ equipmentLabel.Name = "EquipmentLabel"
 equipmentLabel.Size = UDim2.new(1, -10, 0, 25)
 equipmentLabel.Position = UDim2.new(0, 5, 0, 55)
 equipmentLabel.BackgroundTransparency = 1
-equipmentLabel.Text = "Rod: Basic Rod | Bait: Worm"
+equipmentLabel.Text = "Pancingan: Basic Rod | Umpan: Worm"
 equipmentLabel.TextColor3 = Color3.fromRGB(200, 200, 200)
 equipmentLabel.TextScaled = true
 equipmentLabel.Font = Enum.Font.SourceSans
@@ -217,7 +217,7 @@ fishButton.Size = UDim2.new(0.8, 0, 0, 40)
 fishButton.Position = UDim2.new(0.1, 0, 0, 10)
 fishButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
 fishButton.BorderSizePixel = 0
-fishButton.Text = "🎣 Start Fishing"
+fishButton.Text = "🎣 Mulai Mancing"
 fishButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 fishButton.TextScaled = true
 fishButton.Font = Enum.Font.SourceSansBold
@@ -234,7 +234,7 @@ shopButton.Size = UDim2.new(0.35, 0, 0, 30)
 shopButton.Position = UDim2.new(0.05, 0, 0, 60)
 shopButton.BackgroundColor3 = Color3.fromRGB(0, 100, 200)
 shopButton.BorderSizePixel = 0
-shopButton.Text = "🛒 Shop"
+shopButton.Text = "🛒 Toko"
 shopButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 shopButton.TextScaled = true
 shopButton.Font = Enum.Font.SourceSansBold
@@ -250,7 +250,7 @@ inventoryButton.Name = "InventoryButton"
 inventoryButton.Size = UDim2.new(0.35, 0, 0, 30)
 inventoryButton.Position = UDim2.new(0.6, 0, 0, 60)
 inventoryButton.BackgroundColor3 = Color3.fromRGB(150, 100, 0)
-shopButton.BorderSizePixel = 0
+inventoryButton.BorderSizePixel = 0
 inventoryButton.Text = "🎒 Inventory"
 inventoryButton.TextColor3 = Color3.fromRGB(255, 255, 255)
 inventoryButton.TextScaled = true
@@ -267,7 +267,7 @@ statusLabel.Name = "StatusLabel"
 statusLabel.Size = UDim2.new(1, -20, 0, 40)
 statusLabel.Position = UDim2.new(0, 10, 0, 250)
 statusLabel.BackgroundTransparency = 1
-statusLabel.Text = "Ready to fish!"
+statusLabel.Text = "Siap memancing!"
 statusLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
 statusLabel.TextScaled = true
 statusLabel.Font = Enum.Font.SourceSans
@@ -298,9 +298,9 @@ local fishingStartedEvent = remoteEventsFolder:FindFirstChild("FishingStartedEve
 if fishingStartedEvent then
     fishingStartedEvent.OnClientEvent:Connect(function()
         isFishing = true
-        fishButton.Text = "🎣 Fishing..."
+        fishButton.Text = "🎣 Memancing..."
         fishButton.BackgroundColor3 = Color3.fromRGB(200, 100, 0)
-        statusLabel.Text = "Fishing in progress..."
+        statusLabel.Text = "Sedang memancing..."
     end)
 end
 
@@ -309,7 +309,7 @@ local fishingStoppedEvent = remoteEventsFolder:FindFirstChild("FishingStoppedEve
 if fishingStoppedEvent then
     fishingStoppedEvent.OnClientEvent:Connect(function()
         isFishing = false
-        fishButton.Text = "🎣 Start Fishing"
+        fishButton.Text = "🎣 Mulai Mancing"
         fishButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
     end)
 end
@@ -319,26 +319,26 @@ local fishCaughtEvent = remoteEventsFolder:FindFirstChild("FishCaughtEvent")
 if fishCaughtEvent then
     fishCaughtEvent.OnClientEvent:Connect(function(success, result, fishData)
         if success then
-            statusLabel.Text = "Caught: " .. result .. "! +" .. fishData.Experience .. " XP"
+            statusLabel.Text = "Tangkap: " .. result .. "! +" .. fishData.Experience .. " XP"
             statusLabel.TextColor3 = Color3.fromRGB(0, 255, 0)
         else
-            statusLabel.Text = "No fish caught this time..."
+            statusLabel.Text = "Tidak ada ikan yang tertangkap..."
             statusLabel.TextColor3 = Color3.fromRGB(255, 100, 100)
         end
         
         -- Reset status after 3 seconds
         wait(3)
-        statusLabel.Text = "Ready to fish!"
+        statusLabel.Text = "Siap memancing!"
         statusLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     end)
 end
 
 -- Handle UI updates
 updateUIEvent.OnClientEvent:Connect(function(playerData)
-    moneyLabel.Text = "Money: $" .. playerData.Money
-    rankLabel.Text = "Rank: " .. playerData.Rank
-    expLabel.Text = "Experience: " .. playerData.Experience .. "/" .. (playerData.Rank * 100)
-    equipmentLabel.Text = "Rod: " .. playerData.Equipment.Rod .. " | Bait: " .. playerData.Equipment.Bait
+    moneyLabel.Text = "Uang: $" .. playerData.Money
+    rankLabel.Text = "Level: " .. playerData.Rank
+    expLabel.Text = "XP: " .. playerData.Experience .. "/" .. (playerData.Rank * 100)
+    equipmentLabel.Text = "Pancingan: " .. playerData.Equipment.Rod .. " | Umpan: " .. playerData.Equipment.Bait
     
     -- Update money display
     moneyDisplay.Text = "$" .. playerData.Money
@@ -420,7 +420,7 @@ giftButton.MouseButton1Click:Connect(function()
     giftTitle.Position = UDim2.new(0, 0, 0, 0)
     giftTitle.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
     giftTitle.BorderSizePixel = 0
-    giftTitle.Text = "🎁 Gift Money"
+    giftTitle.Text = "🎁 Kirim Hadiah Uang"
     giftTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
     giftTitle.TextScaled = true
     giftTitle.Font = Enum.Font.SourceSansBold
@@ -451,7 +451,7 @@ giftButton.MouseButton1Click:Connect(function()
     playerNameLabel.Size = UDim2.new(1, -20, 0, 25)
     playerNameLabel.Position = UDim2.new(0, 10, 0, 50)
     playerNameLabel.BackgroundTransparency = 1
-    playerNameLabel.Text = "Player Name:"
+    playerNameLabel.Text = "Nama Pemain:"
     playerNameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     playerNameLabel.TextScaled = true
     playerNameLabel.Font = Enum.Font.SourceSans
@@ -464,7 +464,7 @@ giftButton.MouseButton1Click:Connect(function()
     playerNameBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     playerNameBox.BorderSizePixel = 0
     playerNameBox.Text = ""
-    playerNameBox.PlaceholderText = "Enter player name..."
+    playerNameBox.PlaceholderText = "Masukkan nama pemain..."
     playerNameBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     playerNameBox.TextScaled = true
     playerNameBox.Font = Enum.Font.SourceSans
@@ -479,7 +479,7 @@ giftButton.MouseButton1Click:Connect(function()
     amountLabel.Size = UDim2.new(1, -20, 0, 25)
     amountLabel.Position = UDim2.new(0, 10, 0, 110)
     amountLabel.BackgroundTransparency = 1
-    amountLabel.Text = "Amount:"
+    amountLabel.Text = "Jumlah:"
     amountLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     amountLabel.TextScaled = true
     amountLabel.Font = Enum.Font.SourceSans
@@ -492,7 +492,7 @@ giftButton.MouseButton1Click:Connect(function()
     amountBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
     amountBox.BorderSizePixel = 0
     amountBox.Text = ""
-    amountBox.PlaceholderText = "Enter amount..."
+    amountBox.PlaceholderText = "Masukkan jumlah..."
     amountBox.TextColor3 = Color3.fromRGB(255, 255, 255)
     amountBox.TextScaled = true
     amountBox.Font = Enum.Font.SourceSans
@@ -508,7 +508,7 @@ giftButton.MouseButton1Click:Connect(function()
     sendGiftButton.Position = UDim2.new(0.2, 0, 0, 170)
     sendGiftButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
     sendGiftButton.BorderSizePixel = 0
-    sendGiftButton.Text = "Send Gift"
+    sendGiftButton.Text = "Kirim Hadiah"
     sendGiftButton.TextColor3 = Color3.fromRGB(255, 255, 255)
     sendGiftButton.TextScaled = true
     sendGiftButton.Font = Enum.Font.SourceSansBold
@@ -564,7 +564,7 @@ giftReceivedEvent.OnClientEvent:Connect(function(fromPlayerName, amount)
     local notificationLabel = Instance.new("TextLabel")
     notificationLabel.Size = UDim2.new(1, 0, 1, 0)
     notificationLabel.BackgroundTransparency = 1
-    notificationLabel.Text = "🎁 Gift Received!\n" .. fromPlayerName .. " sent you $" .. amount
+    notificationLabel.Text = "🎁 Hadiah Diterima!\n" .. fromPlayerName .. " mengirim $" .. amount
     notificationLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
     notificationLabel.TextScaled = true
     notificationLabel.Font = Enum.Font.SourceSansBold

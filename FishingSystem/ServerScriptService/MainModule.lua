@@ -13,7 +13,7 @@ local playerDataStore = DataStoreService:GetDataStore("PlayerFishingData")
 
 -- Player data structure
 local defaultPlayerData = {
-    Money = 1000,
+    Money = 100000, -- Starting money: $100,000
     Rank = 1,
     Experience = 0,
     Equipment = {
@@ -37,28 +37,28 @@ local defaultPlayerData = {
 local FishData = {
     ["Common Fish"] = {
         Rarity = "Common",
-        BasePrice = 10,
+        BasePrice = 1000, -- $1,000
         CatchChance = 0.4,
         Experience = 5,
         MinLevel = 1
     },
     ["Rare Fish"] = {
         Rarity = "Rare", 
-        BasePrice = 50,
+        BasePrice = 5000, -- $5,000
         CatchChance = 0.2,
         Experience = 15,
         MinLevel = 3
     },
     ["Epic Fish"] = {
         Rarity = "Epic",
-        BasePrice = 150,
+        BasePrice = 15000, -- $15,000
         CatchChance = 0.1,
         Experience = 30,
         MinLevel = 5
     },
     ["Legendary Fish"] = {
         Rarity = "Legendary",
-        BasePrice = 500,
+        BasePrice = 50000, -- $50,000
         CatchChance = 0.05,
         Experience = 60,
         MinLevel = 8
@@ -76,19 +76,19 @@ local EquipmentData = {
         },
         ["Wooden Rod"] = {
             Level = 2,
-            Price = 500,
+            Price = 50000, -- $50,000
             CatchBonus = 0.1,
             Durability = 150
         },
         ["Steel Rod"] = {
             Level = 3,
-            Price = 1500,
+            Price = 150000, -- $150,000
             CatchBonus = 0.2,
             Durability = 200
         },
         ["Golden Rod"] = {
             Level = 4,
-            Price = 5000,
+            Price = 500000, -- $500,000
             CatchBonus = 0.3,
             Durability = 300
         }
@@ -96,25 +96,25 @@ local EquipmentData = {
     Bait = {
         ["Worm"] = {
             Level = 1,
-            Price = 5,
+            Price = 500, -- $500
             CatchBonus = 0.05,
             Quantity = 1
         },
         ["Bread"] = {
             Level = 2,
-            Price = 15,
+            Price = 1500, -- $1,500
             CatchBonus = 0.1,
             Quantity = 1
         },
         ["Cheese"] = {
             Level = 3,
-            Price = 30,
+            Price = 3000, -- $3,000
             CatchBonus = 0.15,
             Quantity = 1
         },
         ["Premium Bait"] = {
             Level = 4,
-            Price = 100,
+            Price = 10000, -- $10,000
             CatchBonus = 0.25,
             Quantity = 1
         }

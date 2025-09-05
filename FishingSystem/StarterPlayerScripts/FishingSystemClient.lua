@@ -21,11 +21,88 @@ local openInventoryEvent = remoteEventsFolder:WaitForChild("OpenInventoryEvent")
 local rankUpEvent = remoteEventsFolder:WaitForChild("RankUpEvent")
 local getPlayerDataFunction = remoteEventsFolder:WaitForChild("GetPlayerDataFunction")
 local getShopDataFunction = remoteEventsFolder:WaitForChild("GetShopDataFunction")
+local moneyChangeEvent = remoteEventsFolder:WaitForChild("MoneyChangeEvent")
+local giftReceivedEvent = remoteEventsFolder:WaitForChild("GiftReceivedEvent")
+local giftMoneyResponseEvent = remoteEventsFolder:WaitForChild("GiftMoneyResponseEvent")
 
 -- Create main GUI
 local fishingGui = Instance.new("ScreenGui")
 fishingGui.Name = "FishingGui"
 fishingGui.Parent = playerGui
+
+-- Create money display GUI (top-left corner)
+local moneyGui = Instance.new("ScreenGui")
+moneyGui.Name = "MoneyGui"
+moneyGui.Parent = playerGui
+
+-- Money display frame
+local moneyFrame = Instance.new("Frame")
+moneyFrame.Name = "MoneyFrame"
+moneyFrame.Size = UDim2.new(0, 200, 0, 60)
+moneyFrame.Position = UDim2.new(0, 20, 0, 20)
+moneyFrame.BackgroundColor3 = Color3.fromRGB(0, 0, 0)
+moneyFrame.BackgroundTransparency = 0.3
+moneyFrame.BorderSizePixel = 0
+moneyFrame.Parent = moneyGui
+
+local moneyCorner = Instance.new("UICorner")
+moneyCorner.CornerRadius = UDim.new(0, 10)
+moneyCorner.Parent = moneyFrame
+
+-- Money icon
+local moneyIcon = Instance.new("TextLabel")
+moneyIcon.Name = "MoneyIcon"
+moneyIcon.Size = UDim2.new(0, 40, 1, 0)
+moneyIcon.Position = UDim2.new(0, 5, 0, 0)
+moneyIcon.BackgroundTransparency = 1
+moneyIcon.Text = "💰"
+moneyIcon.TextColor3 = Color3.fromRGB(255, 215, 0)
+moneyIcon.TextScaled = true
+moneyIcon.Font = Enum.Font.SourceSansBold
+moneyIcon.Parent = moneyFrame
+
+-- Money amount display
+local moneyDisplay = Instance.new("TextLabel")
+moneyDisplay.Name = "MoneyDisplay"
+moneyDisplay.Size = UDim2.new(1, -50, 0, 30)
+moneyDisplay.Position = UDim2.new(0, 50, 0, 5)
+moneyDisplay.BackgroundTransparency = 1
+moneyDisplay.Text = "$0"
+moneyDisplay.TextColor3 = Color3.fromRGB(255, 215, 0)
+moneyDisplay.TextScaled = true
+moneyDisplay.Font = Enum.Font.SourceSansBold
+moneyDisplay.TextXAlignment = Enum.TextXAlignment.Left
+moneyDisplay.Parent = moneyFrame
+
+-- Money change indicator
+local moneyChange = Instance.new("TextLabel")
+moneyChange.Name = "MoneyChange"
+moneyChange.Size = UDim2.new(1, -50, 0, 20)
+moneyChange.Position = UDim2.new(0, 50, 0, 35)
+moneyChange.BackgroundTransparency = 1
+moneyChange.Text = ""
+moneyChange.TextColor3 = Color3.fromRGB(0, 255, 0)
+moneyChange.TextScaled = true
+moneyChange.Font = Enum.Font.SourceSans
+moneyChange.TextXAlignment = Enum.TextXAlignment.Left
+moneyChange.Parent = moneyFrame
+
+-- Gift button
+local giftButton = Instance.new("TextButton")
+giftButton.Name = "GiftButton"
+giftButton.Size = UDim2.new(0, 30, 0, 30)
+giftButton.Position = UDim2.new(1, -35, 0, 15)
+giftButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+giftButton.BorderSizePixel = 0
+giftButton.Text = "🎁"
+giftButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+giftButton.TextScaled = true
+giftButton.Font = Enum.Font.SourceSansBold
+giftButton.Parent = moneyFrame
+
+local giftCorner = Instance.new("UICorner")
+giftCorner.CornerRadius = UDim.new(0, 6)
+giftCorner.Parent = giftButton
 
 -- Create main frame
 local mainFrame = Instance.new("Frame")
@@ -262,6 +339,9 @@ updateUIEvent.OnClientEvent:Connect(function(playerData)
     rankLabel.Text = "Rank: " .. playerData.Rank
     expLabel.Text = "Experience: " .. playerData.Experience .. "/" .. (playerData.Rank * 100)
     equipmentLabel.Text = "Rod: " .. playerData.Equipment.Rod .. " | Bait: " .. playerData.Equipment.Bait
+    
+    -- Update money display
+    moneyDisplay.Text = "$" .. playerData.Money
 end)
 
 -- Handle rank up
@@ -293,6 +373,245 @@ rankUpEvent.OnClientEvent:Connect(function(rankInfo)
     
     tween.Completed:Connect(function()
         rankUpFrame:Destroy()
+    end)
+end)
+
+-- Money change animation
+local function showMoneyChange(amount, isPositive)
+    if amount == 0 then return end
+    
+    local changeText = isPositive and "+$" .. amount or "-$" .. math.abs(amount)
+    local changeColor = isPositive and Color3.fromRGB(0, 255, 0) or Color3.fromRGB(255, 100, 100)
+    
+    moneyChange.Text = changeText
+    moneyChange.TextColor3 = changeColor
+    
+    -- Animate the change
+    local tween = TweenService:Create(moneyChange, TweenInfo.new(0.5, Enum.EasingStyle.Quad), {TextTransparency = 1})
+    tween:Play()
+    
+    tween.Completed:Connect(function()
+        moneyChange.Text = ""
+        moneyChange.TextTransparency = 0
+    end)
+end
+
+-- Gift button functionality
+giftButton.MouseButton1Click:Connect(function()
+    -- Create gift GUI
+    local giftGui = Instance.new("ScreenGui")
+    giftGui.Name = "GiftGui"
+    giftGui.Parent = playerGui
+    
+    local giftFrame = Instance.new("Frame")
+    giftFrame.Size = UDim2.new(0, 300, 0, 200)
+    giftFrame.Position = UDim2.new(0.5, -150, 0.5, -100)
+    giftFrame.BackgroundColor3 = Color3.fromRGB(50, 50, 50)
+    giftFrame.BorderSizePixel = 0
+    giftFrame.Parent = giftGui
+    
+    local giftCorner = Instance.new("UICorner")
+    giftCorner.CornerRadius = UDim.new(0, 10)
+    giftCorner.Parent = giftFrame
+    
+    -- Title
+    local giftTitle = Instance.new("TextLabel")
+    giftTitle.Size = UDim2.new(1, 0, 0, 40)
+    giftTitle.Position = UDim2.new(0, 0, 0, 0)
+    giftTitle.BackgroundColor3 = Color3.fromRGB(70, 70, 70)
+    giftTitle.BorderSizePixel = 0
+    giftTitle.Text = "🎁 Gift Money"
+    giftTitle.TextColor3 = Color3.fromRGB(255, 255, 255)
+    giftTitle.TextScaled = true
+    giftTitle.Font = Enum.Font.SourceSansBold
+    giftTitle.Parent = giftFrame
+    
+    local titleCorner = Instance.new("UICorner")
+    titleCorner.CornerRadius = UDim.new(0, 10)
+    titleCorner.Parent = giftTitle
+    
+    -- Close button
+    local closeButton = Instance.new("TextButton")
+    closeButton.Size = UDim2.new(0, 30, 0, 30)
+    closeButton.Position = UDim2.new(1, -35, 0, 5)
+    closeButton.BackgroundColor3 = Color3.fromRGB(200, 50, 50)
+    closeButton.BorderSizePixel = 0
+    closeButton.Text = "✕"
+    closeButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    closeButton.TextScaled = true
+    closeButton.Font = Enum.Font.SourceSansBold
+    closeButton.Parent = giftTitle
+    
+    local closeCorner = Instance.new("UICorner")
+    closeCorner.CornerRadius = UDim.new(0, 6)
+    closeCorner.Parent = closeButton
+    
+    -- Player name input
+    local playerNameLabel = Instance.new("TextLabel")
+    playerNameLabel.Size = UDim2.new(1, -20, 0, 25)
+    playerNameLabel.Position = UDim2.new(0, 10, 0, 50)
+    playerNameLabel.BackgroundTransparency = 1
+    playerNameLabel.Text = "Player Name:"
+    playerNameLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    playerNameLabel.TextScaled = true
+    playerNameLabel.Font = Enum.Font.SourceSans
+    playerNameLabel.TextXAlignment = Enum.TextXAlignment.Left
+    playerNameLabel.Parent = giftFrame
+    
+    local playerNameBox = Instance.new("TextBox")
+    playerNameBox.Size = UDim2.new(1, -20, 0, 30)
+    playerNameBox.Position = UDim2.new(0, 10, 0, 75)
+    playerNameBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    playerNameBox.BorderSizePixel = 0
+    playerNameBox.Text = ""
+    playerNameBox.PlaceholderText = "Enter player name..."
+    playerNameBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    playerNameBox.TextScaled = true
+    playerNameBox.Font = Enum.Font.SourceSans
+    playerNameBox.Parent = giftFrame
+    
+    local nameBoxCorner = Instance.new("UICorner")
+    nameBoxCorner.CornerRadius = UDim.new(0, 6)
+    nameBoxCorner.Parent = playerNameBox
+    
+    -- Amount input
+    local amountLabel = Instance.new("TextLabel")
+    amountLabel.Size = UDim2.new(1, -20, 0, 25)
+    amountLabel.Position = UDim2.new(0, 10, 0, 110)
+    amountLabel.BackgroundTransparency = 1
+    amountLabel.Text = "Amount:"
+    amountLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    amountLabel.TextScaled = true
+    amountLabel.Font = Enum.Font.SourceSans
+    amountLabel.TextXAlignment = Enum.TextXAlignment.Left
+    amountLabel.Parent = giftFrame
+    
+    local amountBox = Instance.new("TextBox")
+    amountBox.Size = UDim2.new(1, -20, 0, 30)
+    amountBox.Position = UDim2.new(0, 10, 0, 135)
+    amountBox.BackgroundColor3 = Color3.fromRGB(60, 60, 60)
+    amountBox.BorderSizePixel = 0
+    amountBox.Text = ""
+    amountBox.PlaceholderText = "Enter amount..."
+    amountBox.TextColor3 = Color3.fromRGB(255, 255, 255)
+    amountBox.TextScaled = true
+    amountBox.Font = Enum.Font.SourceSans
+    amountBox.Parent = giftFrame
+    
+    local amountBoxCorner = Instance.new("UICorner")
+    amountBoxCorner.CornerRadius = UDim.new(0, 6)
+    amountBoxCorner.Parent = amountBox
+    
+    -- Gift button
+    local sendGiftButton = Instance.new("TextButton")
+    sendGiftButton.Size = UDim2.new(0.6, 0, 0, 30)
+    sendGiftButton.Position = UDim2.new(0.2, 0, 0, 170)
+    sendGiftButton.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+    sendGiftButton.BorderSizePixel = 0
+    sendGiftButton.Text = "Send Gift"
+    sendGiftButton.TextColor3 = Color3.fromRGB(255, 255, 255)
+    sendGiftButton.TextScaled = true
+    sendGiftButton.Font = Enum.Font.SourceSansBold
+    sendGiftButton.Parent = giftFrame
+    
+    local sendGiftCorner = Instance.new("UICorner")
+    sendGiftCorner.CornerRadius = UDim.new(0, 6)
+    sendGiftCorner.Parent = sendGiftButton
+    
+    -- Button events
+    closeButton.MouseButton1Click:Connect(function()
+        giftGui:Destroy()
+    end)
+    
+    sendGiftButton.MouseButton1Click:Connect(function()
+        local targetPlayer = playerNameBox.Text
+        local amount = tonumber(amountBox.Text)
+        
+        if targetPlayer and amount and amount > 0 then
+            -- Fire gift event to server
+            local giftEvent = remoteEventsFolder:FindFirstChild("GiftMoneyEvent")
+            if giftEvent then
+                giftEvent:FireServer(targetPlayer, amount)
+            end
+            giftGui:Destroy()
+        end
+    end)
+end)
+
+-- Handle money change events
+moneyChangeEvent.OnClientEvent:Connect(function(amount, isPositive)
+    showMoneyChange(amount, isPositive)
+end)
+
+-- Handle gift received events
+giftReceivedEvent.OnClientEvent:Connect(function(fromPlayerName, amount)
+    -- Create gift received notification
+    local notificationGui = Instance.new("ScreenGui")
+    notificationGui.Name = "GiftNotification"
+    notificationGui.Parent = playerGui
+    
+    local notificationFrame = Instance.new("Frame")
+    notificationFrame.Size = UDim2.new(0, 300, 0, 80)
+    notificationFrame.Position = UDim2.new(0.5, -150, 0.2, 0)
+    notificationFrame.BackgroundColor3 = Color3.fromRGB(0, 150, 0)
+    notificationFrame.BorderSizePixel = 0
+    notificationFrame.Parent = notificationGui
+    
+    local notificationCorner = Instance.new("UICorner")
+    notificationCorner.CornerRadius = UDim.new(0, 10)
+    notificationCorner.Parent = notificationFrame
+    
+    local notificationLabel = Instance.new("TextLabel")
+    notificationLabel.Size = UDim2.new(1, 0, 1, 0)
+    notificationLabel.BackgroundTransparency = 1
+    notificationLabel.Text = "🎁 Gift Received!\n" .. fromPlayerName .. " sent you $" .. amount
+    notificationLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    notificationLabel.TextScaled = true
+    notificationLabel.Font = Enum.Font.SourceSansBold
+    notificationLabel.Parent = notificationFrame
+    
+    -- Animate notification
+    local tween = TweenService:Create(notificationFrame, TweenInfo.new(3, Enum.EasingStyle.Quad), {BackgroundTransparency = 1})
+    tween:Play()
+    
+    tween.Completed:Connect(function()
+        notificationGui:Destroy()
+    end)
+end)
+
+-- Handle gift response events
+giftMoneyResponseEvent.OnClientEvent:Connect(function(success, message)
+    -- Create response notification
+    local responseGui = Instance.new("ScreenGui")
+    responseGui.Name = "GiftResponse"
+    responseGui.Parent = playerGui
+    
+    local responseFrame = Instance.new("Frame")
+    responseFrame.Size = UDim2.new(0, 250, 0, 60)
+    responseFrame.Position = UDim2.new(0.5, -125, 0.3, 0)
+    responseFrame.BackgroundColor3 = success and Color3.fromRGB(0, 150, 0) or Color3.fromRGB(200, 50, 50)
+    responseFrame.BorderSizePixel = 0
+    responseFrame.Parent = responseGui
+    
+    local responseCorner = Instance.new("UICorner")
+    responseCorner.CornerRadius = UDim.new(0, 8)
+    responseCorner.Parent = responseFrame
+    
+    local responseLabel = Instance.new("TextLabel")
+    responseLabel.Size = UDim2.new(1, 0, 1, 0)
+    responseLabel.BackgroundTransparency = 1
+    responseLabel.Text = message
+    responseLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    responseLabel.TextScaled = true
+    responseLabel.Font = Enum.Font.SourceSansBold
+    responseLabel.Parent = responseFrame
+    
+    -- Animate response
+    local tween = TweenService:Create(responseFrame, TweenInfo.new(2, Enum.EasingStyle.Quad), {BackgroundTransparency = 1})
+    tween:Play()
+    
+    tween.Completed:Connect(function()
+        responseGui:Destroy()
     end)
 end)
 

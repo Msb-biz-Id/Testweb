@@ -170,12 +170,25 @@ function FishingSystem:AddMoney(player, amount)
     data.Money = data.Money + amount
     data.Stats.TotalMoneyEarned = data.Stats.TotalMoneyEarned + amount
     self:UpdatePlayerUI(player)
+    
+    -- Fire money change event to client
+    local moneyChangeEvent = ReplicatedStorage:FindFirstChild("MoneyChangeEvent")
+    if moneyChangeEvent then
+        moneyChangeEvent:FireClient(player, amount, true)
+    end
 end
 
 function FishingSystem:RemoveMoney(player, amount)
     local data = self:GetPlayerData(player)
     if data.Money >= amount then
         data.Money = data.Money - amount
+        
+        -- Fire money change event to client
+        local moneyChangeEvent = ReplicatedStorage:FindFirstChild("MoneyChangeEvent")
+        if moneyChangeEvent then
+            moneyChangeEvent:FireClient(player, -amount, false)
+        end
+        
         return true
     end
     return false
@@ -337,6 +350,48 @@ function FishingSystem:BuyEquipment(player, equipmentType, equipmentName)
     self:RemoveMoney(player, equipment.Price)
     self:UpdatePlayerUI(player)
     return true, "Purchase successful"
+end
+
+function FishingSystem:GiftMoney(fromPlayer, toPlayerName, amount)
+    local fromData = self:GetPlayerData(fromPlayer)
+    
+    -- Check if player has enough money
+    if fromData.Money < amount then
+        return false, "Not enough money"
+    end
+    
+    -- Find target player
+    local targetPlayer = nil
+    for _, player in pairs(Players:GetPlayers()) do
+        if player.Name:lower() == toPlayerName:lower() then
+            targetPlayer = player
+            break
+        end
+    end
+    
+    if not targetPlayer then
+        return false, "Player not found"
+    end
+    
+    if targetPlayer == fromPlayer then
+        return false, "Cannot gift money to yourself"
+    end
+    
+    -- Transfer money
+    local success = self:RemoveMoney(fromPlayer, amount)
+    if success then
+        self:AddMoney(targetPlayer, amount)
+        
+        -- Fire gift received event to target player
+        local giftReceivedEvent = ReplicatedStorage:FindFirstChild("GiftReceivedEvent")
+        if giftReceivedEvent then
+            giftReceivedEvent:FireClient(targetPlayer, fromPlayer.Name, amount)
+        end
+        
+        return true, "Gift sent successfully"
+    end
+    
+    return false, "Failed to send gift"
 end
 
 function FishingSystem:UpdatePlayerUI(player)

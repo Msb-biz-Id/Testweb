@@ -15,6 +15,7 @@ local buyEquipmentEvent = remoteEventsFolder:WaitForChild("BuyEquipmentEvent")
 local sellFishEvent = remoteEventsFolder:WaitForChild("SellFishEvent")
 local getPlayerDataFunction = remoteEventsFolder:WaitForChild("GetPlayerDataFunction")
 local getShopDataFunction = remoteEventsFolder:WaitForChild("GetShopDataFunction")
+local giftMoneyEvent = remoteEventsFolder:WaitForChild("GiftMoneyEvent")
 
 -- Get MainModule
 local MainModule = require(ServerScriptService:WaitForChild("MainModule"))
@@ -105,6 +106,17 @@ getShopDataFunction.OnServerInvoke = function(player)
     }
     return shopData
 end
+
+-- Handle gift money requests
+giftMoneyEvent.OnServerEvent:Connect(function(player, targetPlayerName, amount)
+    local success, message = fishingSystem:GiftMoney(player, targetPlayerName, amount)
+    
+    -- Fire response back to client
+    local responseEvent = remoteEventsFolder:FindFirstChild("GiftMoneyResponseEvent")
+    if responseEvent then
+        responseEvent:FireClient(player, success, message)
+    end
+end)
 
 -- Initialize players when they join
 Players.PlayerAdded:Connect(function(player)

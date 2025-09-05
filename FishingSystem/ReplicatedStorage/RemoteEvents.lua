@@ -55,6 +55,24 @@ local rankUpEvent = Instance.new("RemoteEvent")
 rankUpEvent.Name = "RankUpEvent"
 rankUpEvent.Parent = remoteEventsFolder
 
+-- Gift Events
+local giftMoneyEvent = Instance.new("RemoteEvent")
+giftMoneyEvent.Name = "GiftMoneyEvent"
+giftMoneyEvent.Parent = remoteEventsFolder
+
+local giftReceivedEvent = Instance.new("RemoteEvent")
+giftReceivedEvent.Name = "GiftReceivedEvent"
+giftReceivedEvent.Parent = remoteEventsFolder
+
+-- Money Events
+local moneyChangeEvent = Instance.new("RemoteEvent")
+moneyChangeEvent.Name = "MoneyChangeEvent"
+moneyChangeEvent.Parent = remoteEventsFolder
+
+local giftMoneyResponseEvent = Instance.new("RemoteEvent")
+giftMoneyResponseEvent.Name = "GiftMoneyResponseEvent"
+giftMoneyResponseEvent.Parent = remoteEventsFolder
+
 -- Remote Functions
 local getPlayerDataFunction = Instance.new("RemoteFunction")
 getPlayerDataFunction.Name = "GetPlayerDataFunction"

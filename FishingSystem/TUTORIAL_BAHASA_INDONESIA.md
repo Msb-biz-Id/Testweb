@@ -83,21 +83,35 @@ Sistem mancing Roblox ini adalah game fishing yang lengkap dengan fitur:
   - Epic Fish: $15,000 per ekor
   - Legendary Fish: $50,000 per ekor
 
-### 🎣 Spot Memancing (4 Lokasi)
-- **Lake Shore**: Posisi (-30, 0, 30)
-- **River Bank**: Posisi (30, 0, 30)
-- **Pond Edge**: Posisi (-30, 0, -30)
-- **Creek Side**: Posisi (30, 0, -30)
+### 🎣 Area Memancing (Semua Air)
+- **Central Lake**: Danau besar di tengah peta
+- **Main River**: Sungai utama yang mengalir
+- **Forest Pond**: Kolam di hutan
+- **Mountain Spring**: Mata air di gunung
+- **Garden Pool**: Kolam taman
+- **Crystal Lake**: Danau kristal
+- **Ocean Shore**: Pantai lautan
+- **Northern Sea**: Laut utara
+- **Eastern Bay**: Teluk timur
+- **Western Gulf**: Teluk barat
+- **Waterfalls**: Air terjun
+- **Streams**: Sungai kecil
+- **DAN SEMUA AREA AIR LAINNYA!** 🎣
 
 ---
 
 ## 🎮 CARA BERMAIN
 
 ### Memulai Memancing
-1. **Pergi ke Spot Memancing**: Berjalan ke area air (platform biru)
-2. **Klik "Start Fishing"**: Tekan tombol di UI
+1. **Pergi ke Area Air**: Berjalan ke area air manapun di peta
+2. **Klik Air atau Tombol**: Klik langsung pada air atau tombol "Mulai Mancing"
 3. **Tunggu Animasi**: Proses memancing 3-8 detik
 4. **Lihat Hasil**: Ikan tertangkap atau tidak
+
+**Cara Memancing:**
+- **Klik Langsung**: Klik pada area air manapun untuk memancing
+- **Tombol UI**: Gunakan tombol "Mulai Mancing" di interface
+- **Prompt Otomatis**: Sistem akan menampilkan prompt saat dekat air
 
 ### Membeli Peralatan
 1. **Pergi ke Toko**: Platform biru dengan tanda toko

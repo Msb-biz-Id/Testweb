@@ -283,6 +283,8 @@ fishButton.MouseButton1Click:Connect(function()
     end
 end)
 
+-- Also allow fishing by clicking on water parts (handled by server)
+
 -- Shop button click handler
 shopButton.MouseButton1Click:Connect(function()
     openShopEvent:FireClient(player)

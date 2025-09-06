@@ -182,4 +182,88 @@ ground.BrickColor = BrickColor.new("Bright green")
 ground.Material = Enum.Material.Grass
 ground.Parent = locationsFolder
 
+-- Create large water areas
+local waterAreas = {
+    -- Large lake in the center
+    {Position = Vector3.new(0, 0.5, 0), Size = Vector3.new(80, 1, 60), Name = "Central Lake"},
+    -- River flowing through
+    {Position = Vector3.new(0, 0.5, 50), Size = Vector3.new(120, 1, 20), Name = "Main River"},
+    -- Small ponds
+    {Position = Vector3.new(-60, 0.5, -60), Size = Vector3.new(30, 1, 30), Name = "Forest Pond"},
+    {Position = Vector3.new(60, 0.5, -60), Size = Vector3.new(25, 1, 25), Name = "Mountain Spring"},
+    {Position = Vector3.new(-60, 0.5, 60), Size = Vector3.new(35, 1, 35), Name = "Garden Pool"},
+    {Position = Vector3.new(60, 0.5, 60), Size = Vector3.new(40, 1, 40), Name = "Crystal Lake"},
+    -- Ocean areas
+    {Position = Vector3.new(0, 0.5, 100), Size = Vector3.new(200, 1, 50), Name = "Ocean Shore"},
+    {Position = Vector3.new(0, 0.5, -100), Size = Vector3.new(200, 1, 50), Name = "Northern Sea"},
+    {Position = Vector3.new(100, 0.5, 0), Size = Vector3.new(50, 1, 200), Name = "Eastern Bay"},
+    {Position = Vector3.new(-100, 0.5, 0), Size = Vector3.new(50, 1, 200), Name = "Western Gulf"}
+}
+
+for i, waterArea in pairs(waterAreas) do
+    local waterPart = Instance.new("Part")
+    waterPart.Name = waterArea.Name
+    waterPart.Size = waterArea.Size
+    waterPart.Position = waterArea.Position
+    waterPart.Anchored = true
+    waterPart.BrickColor = BrickColor.new("Bright blue")
+    waterPart.Material = Enum.Material.Water
+    waterPart.CanCollide = false
+    waterPart.Parent = locationsFolder
+    
+    -- Add transparency for better water effect
+    waterPart.Transparency = 0.3
+    
+    -- Add water sign
+    local waterSign = Instance.new("Part")
+    waterSign.Name = "WaterSign"
+    waterSign.Size = Vector3.new(0.2, 4, 6)
+    waterSign.Position = waterArea.Position + Vector3.new(0, 2, 0)
+    waterSign.Anchored = true
+    waterSign.BrickColor = BrickColor.new("Bright yellow")
+    waterSign.Material = Enum.Material.Neon
+    waterSign.Parent = waterPart
+    
+    -- Water sign text
+    local waterText = Instance.new("BillboardGui")
+    waterText.Size = UDim2.new(0, 100, 0, 40)
+    waterText.StudsOffset = Vector3.new(0, 1, 0)
+    waterText.Parent = waterSign
+    
+    local waterTextLabel = Instance.new("TextLabel")
+    waterTextLabel.Size = UDim2.new(1, 0, 1, 0)
+    waterTextLabel.BackgroundTransparency = 1
+    waterTextLabel.Text = "🎣\n" .. waterArea.Name
+    waterTextLabel.TextColor3 = Color3.fromRGB(255, 255, 255)
+    waterTextLabel.TextScaled = true
+    waterTextLabel.Font = Enum.Font.SourceSansBold
+    waterTextLabel.Parent = waterText
+end
+
+-- Create additional water features
+local additionalWater = {
+    -- Waterfalls
+    {Position = Vector3.new(0, 5, 80), Size = Vector3.new(10, 10, 2), Name = "Waterfall"},
+    {Position = Vector3.new(40, 3, -40), Size = Vector3.new(8, 6, 2), Name = "Small Falls"},
+    -- Water streams
+    {Position = Vector3.new(-30, 0.5, 0), Size = Vector3.new(5, 1, 100), Name = "Stream 1"},
+    {Position = Vector3.new(30, 0.5, 0), Size = Vector3.new(5, 1, 100), Name = "Stream 2"},
+    {Position = Vector3.new(0, 0.5, -30), Size = Vector3.new(100, 1, 5), Name = "Stream 3"},
+    {Position = Vector3.new(0, 0.5, 30), Size = Vector3.new(100, 1, 5), Name = "Stream 4"}
+}
+
+for i, waterFeature in pairs(additionalWater) do
+    local waterPart = Instance.new("Part")
+    waterPart.Name = waterFeature.Name
+    waterPart.Size = waterFeature.Size
+    waterPart.Position = waterFeature.Position
+    waterPart.Anchored = true
+    waterPart.BrickColor = BrickColor.new("Bright blue")
+    waterPart.Material = Enum.Material.Water
+    waterPart.CanCollide = false
+    waterPart.Transparency = 0.2
+    waterPart.Parent = locationsFolder
+end
+
 print("Fishing System map locations created successfully!")
+print("All water areas are now fishable!")

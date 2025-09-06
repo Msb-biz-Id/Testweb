@@ -18,16 +18,18 @@ A comprehensive fishing system for Roblox with all the features you requested!
 - **Real-time Pricing**: See current market values
 
 ### 🎣 Fishing System
-- **4 Fishing Spots**: Different locations around the map
-- **Random Fish Catching**: Based on equipment, bait, and player level
+- **ALL WATER AREAS**: Every water part on the map is fishable!
+- **Automatic Detection**: System detects water by material, color, and name
+- **Visual Effects**: Water areas have glowing effects and particle systems
+- **Click to Fish**: Click directly on any water area to start fishing
 - **Fish Types**:
-  - **Common Fish** (Level 1+): $10 each, 40% catch rate
-  - **Rare Fish** (Level 3+): $50 each, 20% catch rate
-  - **Epic Fish** (Level 5+): $150 each, 10% catch rate
-  - **Legendary Fish** (Level 8+): $500 each, 5% catch rate
+  - **Common Fish** (Level 1+): $1,000 each, 40% catch rate
+  - **Rare Fish** (Level 3+): $5,000 each, 20% catch rate
+  - **Epic Fish** (Level 5+): $15,000 each, 10% catch rate
+  - **Legendary Fish** (Level 8+): $50,000 each, 5% catch rate
 
 ### 💵 Economy System
-- **Starting Money**: $1,000
+- **Starting Money**: $100,000
 - **Money Management**: Buy equipment, sell fish
 - **Persistent Data**: All progress saved automatically
 
